@@ -14,7 +14,17 @@
       # $ nix-env -qaP | grep wget
       environment.systemPackages =
         [ pkgs.vim
+        pkgs.bat
         ];
+      #if brew is installed
+      # homebrew = {
+      #       enable = true;
+      #       # onActivation.cleanup = "uninstall";
+
+      #       taps = [];
+      #       brews = [ "cowsay" ];
+      #       casks = [];
+      #   };
 
       # Auto upgrade nix package and the daemon service.
       services.nix-daemon.enable = true;
@@ -37,6 +47,7 @@
 
       # The platform the configuration will be used on.
       nixpkgs.hostPlatform = "aarch64-darwin";
+      security.pam.enableSudoTouchIdAuth = true;
     };
   in
   {
