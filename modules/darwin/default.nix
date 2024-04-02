@@ -39,6 +39,7 @@
       _FXShowPosixPathInTitle = true;
     };
   };
+  fonts.fonts = [ (pkgs.nerdfonts.override { fonts = [ "Hack" ]; }) ];
   system.keyboard.enableKeyMapping = true;
   system.keyboard.remapCapsLockToEscape = true;
   # Use homebrew to install casks and Mac App Store apps
