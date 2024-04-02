@@ -16,7 +16,7 @@
     # nix-darwin expects a darwinConfigurations key
     darwinConfigurations = {
       # my macbook air machine
-      "air" = 
+      air = 
         # darwinSystem is a function inherited from the nix-darwin lib namespace
         inputs.nix-darwin.lib.darwinSystem {
           system = "aarch64-darwin"; # alternatively "x86_64-darwin"
