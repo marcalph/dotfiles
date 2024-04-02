@@ -32,6 +32,7 @@
   programs.fzf.enable = true;
   programs.fzf.enableZshIntegration = true;
   programs.git.enable = true;
+  # programs.ranger.enable = true;
   programs.zsh.enable = true;
   programs.zsh.enableCompletion = true;
   # programs.zsh.autosuggestion.enable = true;
@@ -43,14 +44,28 @@
     cp = "cp -iv";
     mv = "mv -iv";
     rm = "rm -iv";
+    d = "dirs -v";
+    cat = "bat";
     ll = "eza -hailF --icons";
     ls = "eza --grid --icons";
     tree = "eza --tree --icons"; 
-    ga = "git add";
+    ga = "git add .";
     gc = "git commit";
+    gl = "git log --oneline --decorate --graph";
     gs = "git status | head -n 2; exa --git -l";
     nixswitch = "darwin-rebuild switch --flake flake.nix";
   };
+  # todo(marcalph): fix this
+  programs.zsh.dirHashes = {
+    docs  = "$HOME/Documents";
+    vids  = "$HOME/Videos";
+    dl    = "$HOME/Downloads";
+  };
+  programs.zsh.initExtra = ''
+    setopt AUTO_PUSHD           # Push the current directory visited on the stack.
+    setopt PUSHD_IGNORE_DUPS    # Do not store duplicates in the stack.
+    setopt PUSHD_SILENT         # Do not print the directory stack after pushd or popd.
+  '';
   programs.alacritty = {
     enable = true;
     settings.font.normal.family = "Hack Nerd Font Mono";
