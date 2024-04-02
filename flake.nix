@@ -22,7 +22,7 @@
           system = "aarch64-darwin"; # alternatively "x86_64-darwin"
           pkgs = import inputs.nixpkgs {system = "aarch64-darwin"; };
         modules = [
-          # include the darwin module
+          # include the nix-darwin module
           ./modules/darwin
           # setup home-manager
           home-manager.darwinModules.home-manager

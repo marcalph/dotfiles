@@ -1,9 +1,8 @@
-{pkgs, ... }: {
+{pkgs, config, ... }: {
   environment.systemPackages =
     [
       pkgs.home-manager
     ];
-
   # Auto upgrade nix package and the daemon 
   services.nix-daemon.enable = true;
   # Create /etc/zshrc that loads the nix-darwin environment.
@@ -17,6 +16,8 @@
       "extra-experimental-features" = [ "nix-command" "flakes" ];
     };
   };
+  # allow spotlight indexing
+  environment.pathsToLink = ["/Applications"];
   # set some OSX preferences 
   system.defaults = {
     # minimal dock
@@ -39,7 +40,7 @@
       _FXShowPosixPathInTitle = true;
     };
   };
-
+  security.pam.enableSudoTouchIdAuth = true;
   system.keyboard.enableKeyMapping = true;
   system.keyboard.remapCapsLockToEscape = true;
   # Use homebrew to install casks and Mac App Store apps

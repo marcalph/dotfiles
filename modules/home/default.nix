@@ -37,6 +37,7 @@
   # programs.zsh.autosuggestion.enable =  true;
   programs.zsh.syntaxHighlighting.enable = true;
   programs.zsh.shellAliases = {
+    ll = "ls -hailF --color=auto";
     ls = "ls --color=auto -F";
     nixswitch = "darwin-rebuild switch --flake flake.nix";
   };
