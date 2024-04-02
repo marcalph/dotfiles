@@ -23,22 +23,17 @@
           pkgs = import inputs.nixpkgs {system = "aarch64-darwin"; };
         };
         modules = [
-          ({pkgs, ...}: {
-            # here goes the nix-darwin configuration preferences
-            programs.zsh.enable = true;
-            environment.shells = [ pkgs.zsh pkgs.bash];
-            environment.loginShell = pkgs.zsh;
-            nix.extraOptions = ''
-              experimental-features = nix-command flakes
-            '';
-            systemPackages = with pkgs; [
-              # install some packages
-              coreutils
-            ];
-            system.keyboard.enableKeyMappping = true;
-            system.keyboard.remapCapsLockToControl = true;
-          })
-          
+          # include the darwin module
+          ./modules/darwin
+          # setup home-manager
+          home-manager.darwinModules.home-manager
+          {
+            home-manager = {              
+              # include the home-manager module
+              users.marcalph = import ./modules/home;
+            };
+            users.users.marcalph.home = "/Users/marcalph";
+          }
         ];
     };
   };
