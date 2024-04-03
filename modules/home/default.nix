@@ -12,7 +12,9 @@
     stateVersion = "23.11"; # Please read the comment before changing.
     # home.packages option allows install of nix packages user profile
     packages = with pkgs; [
+      shellcheck
       tldr
+      ranger
       (pkgs.nerdfonts.override { fonts = ["Hack"]; })
     ];
   # # Required to get the fonts installed by home-manager to be picked up by OS.
@@ -25,6 +27,7 @@
     };
   };
   fonts.fontconfig.enable = true;
+  programs.autojump.enable = true;
   programs.bat.enable = true;
   programs.bat.config.theme = "TwoDark";
   programs.eza.enable = true;
@@ -32,7 +35,8 @@
   programs.fzf.enable = true;
   programs.fzf.enableZshIntegration = true;
   programs.git.enable = true;
-  # programs.ranger.enable = true;
+  programs.neovim.enable = true;
+  programs.ripgrep.enable = true;
   programs.zsh.enable = true;
   programs.zsh.enableCompletion = true;
   # programs.zsh.autosuggestion.enable = true;
@@ -41,11 +45,10 @@
   # programs.zsh.autosuggestion.enable =  true;
   programs.zsh.syntaxHighlighting.enable = true;
   programs.zsh.shellAliases = {
-    cp = "cp -iv";
-    mv = "mv -iv";
-    rm = "rm -iv";
-    d = "dirs -v";
     cat = "bat";
+    cp = "cp -iv";
+    d = "dirs -v";
+    diff = "diff -yw --color=always";
     ll = "eza -hailF --icons";
     ls = "eza --grid --icons";
     tree = "eza --tree --icons"; 
@@ -53,6 +56,9 @@
     gc = "git commit";
     gl = "git log --oneline --decorate --graph";
     gs = "git status | head -n 2; exa --git -l";
+    mv = "mv -iv";
+    projects = "cd $HOME/Projects";
+    rm = "rm -iv";
     nixswitch = "darwin-rebuild switch --flake flake.nix";
   };
   # todo(marcalph): fix this
@@ -64,8 +70,8 @@
   programs.zsh.initExtra = ''
     setopt AUTO_PUSHD           # Push the current directory visited on the stack.
     setopt PUSHD_IGNORE_DUPS    # Do not store duplicates in the stack.
-    setopt PUSHD_SILENT         # Do not print the directory stack after pushd or popd.
-    
+    setopt PUSHD_SILENT         # Do not print the directory stack after pushd or popd.    
+
     for index ({1..9}) alias "$index"="cd +$index"; unset index
   '';
   programs.alacritty = {
