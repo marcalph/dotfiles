@@ -16,6 +16,9 @@
       tldr
       ranger
       (pkgs.nerdfonts.override { fonts = ["Hack"]; })
+      pyenv
+      pipx
+      jq
     ];
   # # Required to get the fonts installed by home-manager to be picked up by OS.
   # fonts.fonts = [ (pkgs.nerdfonts.override { fonts = [ "Hack" ]; }) ];
