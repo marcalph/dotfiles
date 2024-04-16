@@ -27,3 +27,7 @@ Next derivations are setup with an alias:
 ```shell
 nixswitch
 ```
+
+### disclaimer
+
+some tools might require a build/dev env to build (e.g. to build `pyenv install 3.11.9` might require `xz, zlib, ncurse`) - until I flakeify all my dev envsm the hack I'm using is to build within a `nix develop nixpkgs#python3`  

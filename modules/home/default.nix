@@ -76,6 +76,13 @@
     setopt PUSHD_SILENT         # Do not print the directory stack after pushd or popd.    
 
     for index ({1..9}) alias "$index"="cd +$index"; unset index
+
+    export PYENV_ROOT=$HOME/.pyenv
+    if [[ -e $PYENV_ROOT ]]; then
+      export PATH=$PYENV_ROOT/bin:$PATH
+      eval "$(pyenv init --path)"
+      eval "$(pyenv virtualenv-init -)"
+    fi
   '';
   programs.alacritty = {
     enable = true;
