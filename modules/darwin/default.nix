@@ -60,12 +60,13 @@
     #   "wezterm"
     # ];
 
-    # masApps = {
-    #   "Drafts" = 1435957248;
-    #   "Reeder" = 1529448980;
-    #   "Things" = 904280696;
-    #   "Timery" = 1425368544;
-    # };
+    masApps = {
+      "reMarkable desktop" = 1276493162;
+      # "Drafts" = 1435957248;
+      # "Reeder" = 1529448980;
+      # "Things" = 904280696;
+      # "Timery" = 1425368544;
+    };
   };
 
 }
