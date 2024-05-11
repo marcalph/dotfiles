@@ -49,7 +49,6 @@
     # casks = [
     #   "1password"
     #   "bartender"
-    #   "brave-browser"
     #   "fantastical"
     #   "firefox"
     #   "hammerspoon"
@@ -61,7 +60,7 @@
     # ];
 
     masApps = {
-      # "reMarkable desktop" = 1276493162;
+      "reMarkable desktop" = 1276493162;
       # "Drafts" = 1435957248;
       # "Reeder" = 1529448980;
       # "Things" = 904280696;
