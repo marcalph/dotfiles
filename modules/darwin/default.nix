@@ -5,6 +5,10 @@
     ];
   # Auto upgrade nix package and the daemon 
   services.nix-daemon.enable = true;
+  services.openssh.enable = true;
+  # services.openssh.passwordAuthentication = true;
+  # services.openssh.port = 22;
+  # services.openssh.protocol = "2";
   # Create /etc/zshrc that loads the nix-darwin environment.
   programs.zsh.enable = true;
   # Used for backwards compatibility, please read the changelog before changing.
@@ -60,7 +64,6 @@
     # ];
 
     masApps = {
-      "reMarkable desktop" = 1276493162;
       # "Drafts" = 1435957248;
       # "Reeder" = 1529448980;
       # "Things" = 904280696;
