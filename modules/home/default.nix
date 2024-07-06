@@ -16,13 +16,19 @@
       shellcheck
       tldr
       ranger
-      (pkgs.nerdfonts.override { fonts = ["Hack"]; })
+      (pkgs.nerdfonts.override { fonts = [ "Hack"
+        "FiraCode"
+        "Meslo"
+        "SourceCodePro"
+        "Terminus"
+        "Monoid"
+        "Noto"
+        "Iosevka"]; })
+      rustup
       pyenv # used to define a global default python version w/ std tooling i.e. pipx installed poetry
       jq
     ];
-  # # Required to get the fonts installed by home-manager to be picked up by OS.
-  # fonts.fonts = [ (pkgs.nerdfonts.override { fonts = [ "Hack" ]; }) ];
-  # fonts.fontconfig.enable = true;
+    # Required to get the fonts installed by home-manager to be picked up by OS.
     sessionVariables = {
       PAGER = "less";
       CLICLOLOR = 1;
