@@ -2,7 +2,7 @@
 
 ## Motivation
 
-This repo is home the nixified setup that builts my system (currently  a M2 macbook air).  
+This repo is home the nixified setup that builts my systems.  
 It uses nix-darwin with home-manager to install the needed productivity tools I need.
 
 ### Requirements 
