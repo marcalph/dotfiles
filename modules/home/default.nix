@@ -16,14 +16,7 @@
       shellcheck
       tldr
       ranger
-      (pkgs.nerdfonts.override { fonts = [ "Hack"
-        "FiraCode"
-        "Meslo"
-        "SourceCodePro"
-        "Terminus"
-        "Monoid"
-        "Noto"
-        "Iosevka"]; })
+      (pkgs.nerdfonts.override { fonts = [ "Arimo"]; })
       rustup
       pyenv # used to define a global default python version w/ std tooling i.e. pipx installed poetry
       jq
