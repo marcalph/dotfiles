@@ -83,16 +83,6 @@
       eval "$(pyenv virtualenv-init -)"
     fi
   '';
-    home.activation.kitty = lib.hm.dag.entryAfter ["writeBoundry"] ''
-    $DRY_RUN_CMD [ -f ~/Applications/kitty.app ] && rm -rf ~/Applications/kitty.app
-    $DRY_RUN_CMD cp -r ${pkgs.kitty}/Applications/kitty.app/ ~/Applications
-    $DRY_RUN_CMD chmod -R 755 ~/Applications/kitty.app
-  '';
-  programs.alacritty = {
-    enable = true;
-    settings.font.normal.family = "Hack Nerd Font Mono";
-    settings.font.size = 16;
-  };
   programs.starship.enable = true;
   programs.starship.enableZshIntegration = true;
   # home.file.".inputrc".source = ./dotfiles/inputrc;

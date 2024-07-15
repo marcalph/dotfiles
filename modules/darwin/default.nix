@@ -31,7 +31,7 @@
         "/Applications/Slack.app/"
         "/Applications/Firefox.app/"
         "/Applications/Visual Studio Code.app"
-        "${pkgs.alacritty}/Applications/Alacritty.app/"
+        "/Applications/utilities/Terminal.app"
       ];
     };
     NSGlobalDomain = {
