@@ -23,13 +23,20 @@
     # minimal dock
     dock = {
       autohide = true;
-      orientation = "bottom";
+      orientation = "right";
       show-process-indicators = false;
       show-recents = false;
       static-only = true;
+      persistent-apps = [
+        "/Applications/Slack.app/"
+        "/Applications/Firefox.app/"
+        "/Applications/Visual Studio Code.app"
+        "${pkgs.alacritty}/Applications/Alacritty.app/"
+      ];
     };
     NSGlobalDomain = {
       AppleShowAllExtensions = true;
+      AppleShowAllFiles = true;
       InitialKeyRepeat = 14;
       KeyRepeat = 1;
     };

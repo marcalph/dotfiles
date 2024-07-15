@@ -16,7 +16,7 @@
       shellcheck
       tldr
       ranger
-      (pkgs.nerdfonts.override { fonts = [ "Arimo"]; })
+      (pkgs.nerdfonts.override { fonts = [ "Hack"]; })
       rustup
       pyenv # used to define a global default python version w/ std tooling i.e. pipx installed poetry
       jq
@@ -82,6 +82,11 @@
       eval "$(pyenv init --path)"
       eval "$(pyenv virtualenv-init -)"
     fi
+  '';
+    home.activation.kitty = lib.hm.dag.entryAfter ["writeBoundry"] ''
+    $DRY_RUN_CMD [ -f ~/Applications/kitty.app ] && rm -rf ~/Applications/kitty.app
+    $DRY_RUN_CMD cp -r ${pkgs.kitty}/Applications/kitty.app/ ~/Applications
+    $DRY_RUN_CMD chmod -R 755 ~/Applications/kitty.app
   '';
   programs.alacritty = {
     enable = true;
