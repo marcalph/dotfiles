@@ -23,7 +23,7 @@
     # minimal dock
     dock = {
       autohide = true;
-      orientation = "right";
+      orientation = "bottom";
       show-process-indicators = false;
       show-recents = false;
       static-only = true;
@@ -31,6 +31,8 @@
         "/Applications/Slack.app/"
         "/Applications/Firefox.app/"
         "/Applications/Visual Studio Code.app"
+        "/Applications/Notion.app"
+        "/Applications/Notes.app"
         "/Applications/utilities/Terminal.app"
       ];
     };
