@@ -15,6 +15,7 @@
       # gcloud utils
       google-cloud-sql-proxy
       google-cloud-sdk
+      speedtest-cli
       ffmpeg_5
       shellcheck
       tldr
