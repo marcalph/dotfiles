@@ -22,6 +22,7 @@
       ranger
       (pkgs.nerdfonts.override { fonts = [ "Hack"]; })
       rustup
+      xz
       pyenv # used to define a global default python version w/ std tooling i.e. pipx installed poetry
       jq
     ];
@@ -80,12 +81,13 @@
 
     for index ({1..9}) alias "$index"="cd +$index"; unset index
 
-    export PYENV_ROOT=$HOME/.pyenv
-    if [[ -e $PYENV_ROOT ]]; then
-      export PATH=$PYENV_ROOT/bin:$PATH
-      eval "$(pyenv init --path)"
-      eval "$(pyenv virtualenv-init -)"
-    fi
+    export PYENV_ROOT="$HOME/.pyenv"
+    export PATH="$PYENV_ROOT/bin:$PATH"
+    eval "$(pyenv init --path)"
+
+    eval "$(pyenv init -)"
+    eval "$(pyenv virtualenv-init -)"
+
   '';
   programs.starship.enable = true;
   programs.starship.enableZshIntegration = true;
