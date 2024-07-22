@@ -23,6 +23,7 @@
       (pkgs.nerdfonts.override { fonts = [ "Hack"]; })
       rustup
       xz
+      direnv
       pyenv # used to define a global default python version w/ std tooling i.e. pipx installed poetry
       jq
     ];
