@@ -22,10 +22,13 @@
       ranger
       (pkgs.nerdfonts.override { fonts = [ "Hack"]; })
       rustup
-      xz
-      direnv
-      pyenv # used to define a global default python version w/ std tooling i.e. pipx installed poetry
       jq
+      direnv
+      thefuck
+      poetry
+      pyenv # used to define a global default python version w/ std tooling i.e. pipx installed poetry
+      xz
+      readline
     ];
     # Required to get the fonts installed by home-manager to be picked up by OS.
     sessionVariables = {
@@ -84,7 +87,6 @@
 
     export PYENV_ROOT="$HOME/.pyenv"
     export PATH="$PYENV_ROOT/bin:$PATH"
-    eval "$(pyenv init --path)"
 
     eval "$(pyenv init -)"
     eval "$(pyenv virtualenv-init -)"
