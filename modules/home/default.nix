@@ -9,7 +9,7 @@
   # ];
 
   home = {
-    stateVersion = "23.11"; # Please read the comment before changing.
+    stateVersion = "24.05"; # Please read the comment before changing.
     # home.packages option allows install of nix packages user profile
     packages = with pkgs; [
       # gcloud utils
@@ -25,6 +25,9 @@
       jq
       direnv
       thefuck
+      nodejs
+      turbo
+      pre-commit
       poetry
       pyenv # used to define a global default python version w/ std tooling i.e. pipx installed poetry
       xz
