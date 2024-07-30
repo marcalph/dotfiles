@@ -23,7 +23,6 @@
       (pkgs.nerdfonts.override { fonts = [ "Hack"]; })
       rustup
       jq
-      direnv
       thefuck
       nodejs
       turbo
@@ -51,6 +50,7 @@
   programs.git.enable = true;
   programs.neovim.enable = true;
   programs.ripgrep.enable = true;
+  programs.direnv.enable = true;
   programs.zsh.enable = true;
   programs.zsh.enableCompletion = true;
   # programs.zsh.autosuggestion.enable = true;
