@@ -25,6 +25,7 @@
       jq
       thefuck
       nodejs
+      nodePackages.pnpm
       turbo
       pre-commit
       poetry
@@ -51,6 +52,7 @@
   programs.neovim.enable = true;
   programs.ripgrep.enable = true;
   programs.direnv.enable = true;
+  programs.thefuck.enableZshIntegration = true;
   programs.zsh.enable = true;
   programs.zsh.enableCompletion = true;
   # programs.zsh.autosuggestion.enable = true;
@@ -90,10 +92,11 @@
 
     export PYENV_ROOT="$HOME/.pyenv"
     export PATH="$PYENV_ROOT/bin:$PATH"
-
     eval "$(pyenv init -)"
     eval "$(pyenv virtualenv-init -)"
 
+    export PATH=~/.local/bin:$PATH
+    eval $(thefuck --alias)
   '';
   programs.starship.enable = true;
   programs.starship.enableZshIntegration = true;
