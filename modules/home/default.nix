@@ -22,6 +22,7 @@
       ffmpeg_5
       shellcheck
       tldr
+      cargo-binstall
       ranger
       (pkgs.nerdfonts.override { fonts = [ "Hack"]; })
       rustup
