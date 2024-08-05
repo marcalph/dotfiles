@@ -16,6 +16,9 @@
       google-cloud-sql-proxy
       google-cloud-sdk
       speedtest-cli
+      # db
+      postgresql
+      mysql
       ffmpeg_5
       shellcheck
       tldr
