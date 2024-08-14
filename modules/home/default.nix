@@ -7,7 +7,9 @@
   #   ./git.nix
   #   ./wezterm.nix
   # ];
-
+  nixpkgs.config = {
+    allowUnfree = true;
+  };
   home = {
     stateVersion = "24.05"; # Please read the comment before changing.
     # home.packages option allows install of nix packages user profile
@@ -20,6 +22,7 @@
       postgresql
       mysql
       # random tools
+      ngrok
       (pkgs.nerdfonts.override { fonts = [ "Hack"]; })
       ffmpeg_5
       shellcheck
