@@ -19,23 +19,26 @@
       # db
       postgresql
       mysql
+      # random tools
+      (pkgs.nerdfonts.override { fonts = [ "Hack"]; })
       ffmpeg_5
       shellcheck
-      tldr
-      cargo-binstall
-      ranger
-      (pkgs.nerdfonts.override { fonts = [ "Hack"]; })
-      rustup
-      jq
       thefuck
-      nodejs
-      nodePackages.pnpm
-      turbo
+      jq
       pre-commit
-      poetry
+      tldr
+      ranger
+      diesel-cli
       pyenv # used to define a global default python version w/ std tooling i.e. pipx installed poetry
       xz
+      turbo
       readline
+      poetry
+      # code
+      zulu  # aarch64-darwin compatible openjdk
+      nodejs
+      nodePackages.pnpm
+      rustup
     ];
     # Required to get the fonts installed by home-manager to be picked up by OS.
     sessionVariables = {
