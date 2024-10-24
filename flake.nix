@@ -68,11 +68,28 @@
         in pkgs.mkShell {
           packages = with pkgs; [
             xz
+            zlib
             pkg-config
-            python310
-            pyenv
+            ncurses
+            readline
+            gcc
+            gnumake
+            zlib
+            libffi
+            readline
+            bzip2
+            openssl
+            ncurses
+            python312
             # Add other dependencies you need for your dev shell
           ];
+          shellHook = '' 
+          export LDFLAGS="-L${pkgs.libffi.out}/lib -L${pkgs.bzip2.out}/lib -L${pkgs.xz.out}/lib -L${pkgs.zlib.out}/lib -L${pkgs.ncurses.out}/lib -L${pkgs.readline.out}/lib -L${pkgs.openssl.out}/lib"
+          export CFLAGS="-I${pkgs.xz.dev}/include -I${pkgs.zlib.dev}/include -I${pkgs.bzip2.dev}/include -I${pkgs.libffi.dev}/include -I${pkgs.ncurses.dev}/include -I${pkgs.readline}/include -I${pkgs.openssl.dev}/include"
+          export CXXFLAGS="-I${pkgs.xz.dev}/include -I${pkgs.zlib.dev}/include  -I${pkgs.bzip2.dev}/include -I${pkgs.libffi.dev}/include -I${pkgs.ncurses.dev}/include -I${pkgs.readline.dev}/include -I${pkgs.openssl.dev}/include"
+          export CPPFLAGS="-I${pkgs.xz.dev}/include -I${pkgs.zlib.dev}/include  -I${pkgs.bzip2.dev}/include -I${pkgs.libffi.dev}/include -I${pkgs.ncurses.dev}/include -I${pkgs.readline.dev}/include -I${pkgs.openssl.dev}/include"
+          export PKG_CONFIG_PATH="${pkgs.xz.dev}/lib/pkgconfig:${pkgs.zlib.dev}/lib/pkgconfig:${pkgs.bzip2.dev}/lib/pkgconfig:${pkgs.libffi.dev}/lib/pkgconfig:${pkgs.ncurses.dev}/lib/pkgconfig:${pkgs.readline.dev}/lib/pkgconfig:${pkgs.openssl.dev}/lib/pkgconfig"
+          '';
         };
       };
     };

@@ -22,6 +22,7 @@
       postgresql
       mysql
       # random tools
+      python312
       ngrok
       (pkgs.nerdfonts.override { fonts = [ "Hack"]; })
       ffmpeg_5
@@ -32,8 +33,6 @@
       tldr
       ranger
       diesel-cli
-      pyenv # used to define a global default python version w/ std tooling i.e. pipx installed poetry
-      xz
       pkg-config
       turbo
       readline
@@ -101,18 +100,13 @@
 
     for index ({1..9}) alias "$index"="cd +$index"; unset index
 
-    export PYENV_ROOT="$HOME/.pyenv"
-    export PATH="$PYENV_ROOT/bin:$PATH"
-    eval "$(pyenv init -)"
-    eval "$(pyenv virtualenv-init -)"
-
     export PATH=~/.local/bin:$PATH
     eval $(thefuck --alias)
     # ensure pyenv builds Python with xz/lzma support
-    export LDFLAGS="-L${pkgs.xz}/lib -L${pkgs.zlib}/lib"
-    export CPPFLAGS="-I${pkgs.xz}/include -I${pkgs.zlib}/include"
-    export PKG_CONFIG_PATH="${pkgs.xz}/lib/pkgconfig:${pkgs.zlib}/lib/pkgconfig"
-    export PYTHON_CONFIGURE_OPTS="--with-lzma --enable-shared"
+    # export LDFLAGS="-L${pkgs.xz}/lib -L${pkgs.zlib}/lib"
+    # export CPPFLAGS="-I${pkgs.xz}/include -I${pkgs.zlib}/include"
+    # export PKG_CONFIG_PATH="${pkgs.xz}/lib/pkgconfig:${pkgs.zlib}/lib/pkgconfig"
+    # export PYTHON_CONFIGURE_OPTS="--with-lzma --enable-shared"
   '';
   programs.starship.enable = true;
   programs.starship.enableZshIntegration = true;
