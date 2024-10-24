@@ -34,6 +34,7 @@
       diesel-cli
       pyenv # used to define a global default python version w/ std tooling i.e. pipx installed poetry
       xz
+      pkg-config
       turbo
       readline
       poetry
@@ -107,6 +108,11 @@
 
     export PATH=~/.local/bin:$PATH
     eval $(thefuck --alias)
+    # ensure pyenv builds Python with xz/lzma support
+    export LDFLAGS="-L${pkgs.xz}/lib -L${pkgs.zlib}/lib"
+    export CPPFLAGS="-I${pkgs.xz}/include -I${pkgs.zlib}/include"
+    export PKG_CONFIG_PATH="${pkgs.xz}/lib/pkgconfig:${pkgs.zlib}/lib/pkgconfig"
+    export PYTHON_CONFIGURE_OPTS="--with-lzma --enable-shared"
   '';
   programs.starship.enable = true;
   programs.starship.enableZshIntegration = true;

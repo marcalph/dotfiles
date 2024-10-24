@@ -57,8 +57,24 @@
             users.users.marcalph.home = "/Users/marcalph";
           }
         ];
+      };  
+    };
+    # Add devShell for development
+    # Correct devShell using pkgs.mkShell
+    devShells = {
+      aarch64-darwin = {
+        default = let
+          pkgs = import nixpkgs { system = "aarch64-darwin"; };
+        in pkgs.mkShell {
+          packages = with pkgs; [
+            xz
+            pkg-config
+            python310
+            pyenv
+            # Add other dependencies you need for your dev shell
+          ];
+        };
       };
-      
     };
   };
 }
