@@ -57,7 +57,7 @@
   programs.eza.enable = true;
   programs.eza.enableZshIntegration = true;
   programs.fzf.enable = true;
-  programs.fzf.enableZshIntegration = true;
+  programs.fzf.enableZshIntegration = false;
   programs.git.enable = true;
   programs.neovim.enable = true;
   programs.ripgrep.enable = true;
@@ -102,10 +102,7 @@
 
     export PATH=~/.local/bin:$PATH
     eval $(thefuck --alias)
-    
-    # plugins=(zsh-autosuggestions zsh-syntax-highlighting)
-    # autoload -Uz compinit
-    # compinit
+
     # ensure pyenv builds Python with xz/lzma support
     # export LDFLAGS="-L${pkgs.xz}/lib -L${pkgs.zlib}/lib"
     # export CPPFLAGS="-I${pkgs.xz}/include -I${pkgs.zlib}/include"
