@@ -87,15 +87,6 @@
     rm = "rm -iv";
     nixswitch = "darwin-rebuild switch --flake flake.nix";
   };
-  programs.zsh.extraConfig = ''
-    # Enable compinit and compdef
-    autoload -Uz compinit
-    compinit
-    
-    # Bind aliases to their original commands
-    compdef eza=ls
-    compdef _eza eza
-  '';
   # todo(marcalph): fix this
   programs.zsh.dirHashes = {
     docs  = "$HOME/Documents";
@@ -111,6 +102,14 @@
 
     export PATH=~/.local/bin:$PATH
     eval $(thefuck --alias)
+
+    # Enable compinit and compdef
+    autoload -Uz compinit
+    compinit
+    
+    # Bind aliases to their original commands
+    compdef eza=ls
+    compdef _eza eza
 
     # ensure pyenv builds Python with xz/lzma support
     # export LDFLAGS="-L${pkgs.xz}/lib -L${pkgs.zlib}/lib"
