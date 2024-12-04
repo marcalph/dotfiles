@@ -102,6 +102,9 @@
 
     export PATH=~/.local/bin:$PATH
     eval $(thefuck --alias)
+    plugins=(zsh-autosuggestions)
+    autoload -Uz compinit
+    compinit
     # ensure pyenv builds Python with xz/lzma support
     # export LDFLAGS="-L${pkgs.xz}/lib -L${pkgs.zlib}/lib"
     # export CPPFLAGS="-I${pkgs.xz}/include -I${pkgs.zlib}/include"
