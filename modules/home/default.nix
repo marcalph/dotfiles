@@ -65,7 +65,7 @@
   programs.thefuck.enableZshIntegration = true;
   programs.zsh.enable = true;
   programs.zsh.enableCompletion = true;
-  # programs.zsh.autosuggestion.enable = true;
+  programs.zsh.autosuggestion.enable = true;
   programs.zsh.envExtra = "";
   programs.zsh.history.ignoreDups = true;
   # programs.zsh.autosuggestion.enable =  true;
