@@ -55,7 +55,7 @@
   programs.bat.enable = true;
   programs.bat.config.theme = "TwoDark";
   programs.eza.enable = true;
-  # programs.eza.enableZshIntegration = true;
+  programs.eza.enableZshIntegration = true;
   programs.fzf.enable = true;
   programs.fzf.enableZshIntegration = true;
   programs.git.enable = true;
@@ -102,9 +102,10 @@
 
     export PATH=~/.local/bin:$PATH
     eval $(thefuck --alias)
-    plugins=(zsh-autosuggestions)
-    autoload -Uz compinit
-    compinit
+    
+    # plugins=(zsh-autosuggestions zsh-syntax-highlighting)
+    # autoload -Uz compinit
+    # compinit
     # ensure pyenv builds Python with xz/lzma support
     # export LDFLAGS="-L${pkgs.xz}/lib -L${pkgs.zlib}/lib"
     # export CPPFLAGS="-I${pkgs.xz}/include -I${pkgs.zlib}/include"
