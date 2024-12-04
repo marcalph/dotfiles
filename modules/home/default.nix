@@ -109,7 +109,7 @@
     
     # Bind aliases to their original commands
     compdef eza=ls
-    compdef _eza eza
+    compdef eza=ll
 
     # ensure pyenv builds Python with xz/lzma support
     # export LDFLAGS="-L${pkgs.xz}/lib -L${pkgs.zlib}/lib"
