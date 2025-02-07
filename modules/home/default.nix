@@ -58,8 +58,12 @@
   programs.eza.enableZshIntegration = true;
   programs.fzf.enable = true;
   programs.fzf.enableZshIntegration = false;
-  programs.git.enable = true;
-  programs.git.lfs.enable = true;
+  programs.git = {
+    enable = true;
+    lfs.enable = true;
+    userName = "marcalph";
+    userEmail = "marcalph#protonmail.com";
+  };
   programs.neovim.enable = true;
   programs.ripgrep.enable = true;
   programs.direnv.enable = true;
@@ -102,6 +106,9 @@
     for index ({1..9}) alias "$index"="cd +$index"; unset index
 
     export PATH=~/.local/bin:/usr/local/bin:$PATH
+    export XDG_CONFIG_HOME="$HOME/.config"
+
+
     eval $(thefuck --alias)
 
     # Enable compinit and compdef
@@ -117,6 +124,7 @@
     # export CPPFLAGS="-I${pkgs.xz}/include -I${pkgs.zlib}/include"
     # export PKG_CONFIG_PATH="${pkgs.xz}/lib/pkgconfig:${pkgs.zlib}/lib/pkgconfig"
     # export PYTHON_CONFIGURE_OPTS="--with-lzma --enable-shared"
+
   '';
   programs.starship.enable = true;
   programs.starship.enableZshIntegration = true;
