@@ -7,7 +7,7 @@ It uses nix-darwin with home-manager to install the needed productivity tools I 
 
 ### Requirements 
 
-You will need to install `nix` and `brew` to get started. 
+You will need to install `nix`.
 As of Q1 2024, the recommend way of going about it is :  
 ```shell
 # the determinate systems installer provides a cleaner uninstall recipe and survives macOS updates
