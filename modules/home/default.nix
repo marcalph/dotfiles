@@ -59,6 +59,7 @@
   programs.fzf.enable = true;
   programs.fzf.enableZshIntegration = false;
   programs.git.enable = true;
+  programs.git.lfs.enable = true;
   programs.neovim.enable = true;
   programs.ripgrep.enable = true;
   programs.direnv.enable = true;
@@ -100,7 +101,7 @@
 
     for index ({1..9}) alias "$index"="cd +$index"; unset index
 
-    export PATH=~/.local/bin:$PATH
+    export PATH=~/.local/bin:/usr/local/bin:$PATH
     eval $(thefuck --alias)
 
     # Enable compinit and compdef

@@ -14,9 +14,7 @@ As of Q1 2024, the recommend way of going about it is :
 curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install
 ```
 
-```shell
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-```
+
 
 ### Usage
 Once requirements are installed the first time the system is setup is done walling:
