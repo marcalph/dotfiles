@@ -11,7 +11,7 @@
     allowUnfree = true;
   };
   home = {
-    stateVersion = "24.05"; # Please read the comment before changing.
+    stateVersion = "24.11"; # Please read the comment before changing.
     # home.packages option allows install of nix packages user profile
     packages = with pkgs; [
       # gcloud utils
@@ -20,12 +20,10 @@
       speedtest-cli
       # db
       postgresql
-      mysql
       # random tools
       python312
       ngrok
       (pkgs.nerdfonts.override { fonts = [ "Hack"]; })
-      ffmpeg_5
       shellcheck
       thefuck
       jq
