@@ -21,7 +21,7 @@
       # db
       postgresql
       # random tools
-      python312
+      python313
       ngrok
       (pkgs.nerdfonts.override { fonts = [ "Hack"]; })
       shellcheck
