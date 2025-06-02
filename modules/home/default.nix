@@ -21,7 +21,9 @@
       # db
       postgresql
       # random tools
+      poppler
       python313
+      uv
       ngrok
       (pkgs.nerdfonts.override { fonts = [ "Hack"]; })
       shellcheck
