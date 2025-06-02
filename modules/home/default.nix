@@ -14,6 +14,7 @@
     stateVersion = "24.11"; # Please read the comment before changing.
     # home.packages option allows install of nix packages user profile
     packages = with pkgs; [
+      magic-wormhole
       # gcloud utils
       google-cloud-sql-proxy
       google-cloud-sdk
