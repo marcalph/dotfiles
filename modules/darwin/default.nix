@@ -52,39 +52,5 @@
   security.pam.enableSudoTouchIdAuth = true;
   system.keyboard.enableKeyMapping = true;
   system.keyboard.remapCapsLockToEscape = true;
-  # Use homebrew to install casks and Mac App Store apps
-  # homebrew = {
-  #   enable = true;
-
-  #   onActivation = {
-  #     cleanup = "uninstall"; # or "zap" if you want a more aggressive cleanup
-  #   };
-
-  #   taps = [
-  #     "homebrew/cask"
-  #     "homebrew/core"
-  #   ];
-
-    
-  #   # casks = [
-  #   #   "1password"
-  #   #   "bartender"
-  #   #   "fantastical"
-  #   #   "firefox"
-  #   #   "hammerspoon"
-  #   #   "karabiner-elements"
-  #   #   "obsidian"
-  #   #   "raycast"
-  #   #   "soundsource"
-  #   #   "wezterm"
-  #   # ];
-
-  #   masApps = {
-  #     # "Drafts" = 1435957248;
-  #     # "Reeder" = 1529448980;
-  #     # "Things" = 904280696;
-  #     # "Timery" = 1425368544;
-  #   };
-  # };
 
 }
