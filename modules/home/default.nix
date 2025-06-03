@@ -20,7 +20,7 @@
       google-cloud-sdk
       speedtest-cli
       # db
-      postgresql
+      postgresql.dev
       # random tools
       poppler
       python313
@@ -49,6 +49,7 @@
       PAGER = "less";
       CLICLOLOR = 1;
       EDITOR = "nvim";
+      PATH = "${pkgs.postgresql}/bin:" + (builtins.getEnv "PATH");
     };
   };
   fonts.fontconfig.enable = true;
