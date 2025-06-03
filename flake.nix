@@ -78,9 +78,7 @@
             libffi
             readline
             bzip2
-            openssl
             ncurses
-            python312
             # Add other dependencies you need for your dev shell
           ];
           shellHook = '' 

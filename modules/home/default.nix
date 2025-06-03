@@ -15,10 +15,10 @@
     # home.packages option allows install of nix packages user profile
     packages = with pkgs; [
       magic-wormhole
-      # gcloud utils
-      google-cloud-sql-proxy
-      google-cloud-sdk
-      speedtest-cli
+      # # gcloud utils
+      # google-cloud-sql-proxy
+      # google-cloud-sdk
+      # speedtest-cli
       # db
       postgresql.dev
       # random tools
@@ -38,6 +38,10 @@
       turbo
       readline
       poetry
+      openssl
+      openssl.dev
+      zlib
+      xz
       # code
       zulu  # aarch64-darwin compatible openjdk
       nodejs
@@ -50,7 +54,12 @@
       CLICLOLOR = 1;
       EDITOR = "nvim";
       PATH = "${pkgs.postgresql}/bin:" + (builtins.getEnv "PATH");
+        # 🔧 These are critical for psycopg, uv, etc. to build properly
+      LDFLAGS = "-L${pkgs.openssl.out}/lib -L${pkgs.zlib}/lib -L${pkgs.xz}/lib";
+      CPPFLAGS = "-I${pkgs.openssl.out}/include -I${pkgs.zlib}/include -I${pkgs.xz}/include";
+      PKG_CONFIG_PATH = "${pkgs.openssl.out}/lib/pkgconfig:${pkgs.zlib}/lib/pkgconfig:${pkgs.xz}/lib/pkgconfig";
     };
+    
   };
   fonts.fontconfig.enable = true;
   programs.autojump.enable = true;
@@ -101,6 +110,9 @@
     dl    = "$HOME/Downloads";
   };
   programs.zsh.initExtra = ''
+    if [ -e "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh" ]; then
+      source "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
+    fi
     setopt AUTO_PUSHD           # Push the current directory visited on the stack.
     setopt PUSHD_IGNORE_DUPS    # Do not store duplicates in the stack.
     setopt PUSHD_SILENT         # Do not print the directory stack after pushd or popd.    
@@ -122,10 +134,10 @@
     compdef eza=ll
 
     # ensure pyenv builds Python with xz/lzma support
-    # export LDFLAGS="-L${pkgs.xz}/lib -L${pkgs.zlib}/lib"
-    # export CPPFLAGS="-I${pkgs.xz}/include -I${pkgs.zlib}/include"
-    # export PKG_CONFIG_PATH="${pkgs.xz}/lib/pkgconfig:${pkgs.zlib}/lib/pkgconfig"
-    # export PYTHON_CONFIGURE_OPTS="--with-lzma --enable-shared"
+    export LDFLAGS="-L${pkgs.xz}/lib -L${pkgs.zlib}/lib -L${pkgs.openssl.out}/lib"
+    export CPPFLAGS="-I${pkgs.xz}/include -I${pkgs.zlib}/include -I${pkgs.openssl.out}/include"
+    export PKG_CONFIG_PATH="${pkgs.xz}/lib/pkgconfig:${pkgs.zlib}/lib/pkgconfig:${pkgs.openssl.out}/lib/pkgconfig"
+    export PYTHON_CONFIGURE_OPTS="--with-lzma --enable-shared"
 
   '';
   programs.starship.enable = true;
