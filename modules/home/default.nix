@@ -15,14 +15,14 @@
     # home.packages option allows install of nix packages user profile
     packages = with pkgs; [
       magic-wormhole
-      # # gcloud utils
-      # google-cloud-sql-proxy
-      # google-cloud-sdk
-      # speedtest-cli
+      # gcloud utils
+      google-cloud-sql-proxy
+      google-cloud-sdk
+      speedtest-cli
       # db
       postgresql.dev
       # random tools
-      poppler
+      poppler_utils
       python313
       uv
       ngrok
