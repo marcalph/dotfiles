@@ -53,8 +53,7 @@
       PAGER = "less";
       CLICLOLOR = 1;
       EDITOR = "nvim";
-      PATH = "${pkgs.postgresql}/bin:" + (builtins.getEnv "PATH");
-        # 🔧 These are critical for psycopg, uv, etc. to build properly
+      # 🔧 These are critical for psycopg, uv, etc. to build properly
       LDFLAGS = "-L${pkgs.openssl.out}/lib -L${pkgs.zlib}/lib -L${pkgs.xz}/lib";
       CPPFLAGS = "-I${pkgs.openssl.out}/include -I${pkgs.zlib}/include -I${pkgs.xz}/include";
       PKG_CONFIG_PATH = "${pkgs.openssl.out}/lib/pkgconfig:${pkgs.zlib}/lib/pkgconfig:${pkgs.xz}/lib/pkgconfig";
@@ -112,6 +111,9 @@
   programs.zsh.initExtra = ''
     if [ -e "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh" ]; then
       source "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
+    fi
+    if [ -e "/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh" ]; then
+      source "/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh"
     fi
     setopt AUTO_PUSHD           # Push the current directory visited on the stack.
     setopt PUSHD_IGNORE_DUPS    # Do not store duplicates in the stack.
