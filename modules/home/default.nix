@@ -19,8 +19,6 @@
       google-cloud-sql-proxy
       google-cloud-sdk
       speedtest-cli
-      # db
-      postgresql.dev
       # random tools
       poppler_utils
       python313
