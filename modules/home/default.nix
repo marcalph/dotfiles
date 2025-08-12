@@ -24,9 +24,9 @@
       python313
       uv
       ngrok
-      (pkgs.nerdfonts.override { fonts = [ "Hack"]; })
+      pkgs.nerd-fonts.hack
       shellcheck
-      thefuck
+      pay-respects
       jq
       pre-commit
       tldr
@@ -75,7 +75,7 @@
   programs.neovim.enable = true;
   programs.ripgrep.enable = true;
   programs.direnv.enable = true;
-  programs.thefuck.enableZshIntegration = true;
+  # programs.thefuck.enableZshIntegration = true; # replaced with pay-respects
   programs.zsh.enable = true;
   programs.zsh.enableCompletion = true;
   programs.zsh.autosuggestion.enable = true;
@@ -123,7 +123,7 @@
     export XDG_CONFIG_HOME="$HOME/.config"
 
 
-    eval $(thefuck --alias)
+    # eval $(thefuck --alias) # replaced with pay-respects
 
     # Enable compinit and compdef
     autoload -Uz compinit

@@ -3,19 +3,22 @@
     [
       pkgs.home-manager
     ];
-  # Auto upgrade nix package and the daemon 
-  services.nix-daemon.enable = true;
+  # nix-daemon is now managed automatically when nix.enable is on
   # Create /etc/zshrc that loads the nix-darwin environment.
   programs.zsh.enable = true;
   # Used for backwards compatibility, please read the changelog before changing.
   # $ darwin-rebuild changelog
   system.stateVersion = 4;
   nix = {
-    package = pkgs.nix;
-    settings = {
-      "extra-experimental-features" = [ "nix-command" "flakes" ];
-    };
+    enable = false; # Using Determinate installer
+    # package = pkgs.nix;
+    # settings = {
+    #   "extra-experimental-features" = [ "nix-command" "flakes" ];
+    # };
   };
+  
+  # Set primary user for system defaults
+  system.primaryUser = "marcalph";
   # allow spotlight indexing
   environment.pathsToLink = ["/Applications"];
   # set some OSX preferences 
@@ -49,7 +52,7 @@
       _FXShowPosixPathInTitle = true;
     };
   };
-  security.pam.enableSudoTouchIdAuth = true;
+  security.pam.services.sudo_local.touchIdAuth = true;
   system.keyboard.enableKeyMapping = true;
   system.keyboard.remapCapsLockToEscape = true;
 
