@@ -1,25 +1,16 @@
 { config, pkgs, lib, ... }:
 
 {
-  # imports = [
-  #   ./nvim.nix
-  #   ./tmux.nix
-  #   ./git.nix
-  #   ./wezterm.nix
-  # ];
   nixpkgs.config = {
     allowUnfree = true;
   };
   home = {
-    stateVersion = "24.11"; # Please read the comment before changing.
-    # home.packages option allows install of nix packages user profile
+    stateVersion = "24.11";
     packages = with pkgs; [
       magic-wormhole
-      # gcloud utils
       google-cloud-sql-proxy
       google-cloud-sdk
       speedtest-cli
-      # random tools
       poppler_utils
       python313
       uv
@@ -40,18 +31,16 @@
       openssl.dev
       zlib
       xz
-      # code
-      zulu  # aarch64-darwin compatible openjdk
+      zulu
       nodejs
       nodePackages.pnpm
       rustup
     ];
-    # Required to get the fonts installed by home-manager to be picked up by OS.
     sessionVariables = {
       PAGER = "less";
       CLICLOLOR = 1;
       EDITOR = "nvim";
-      # 🔧 These are critical for psycopg, uv, etc. to build properly
+      # Critical build flags for Python packages requiring C extensions
       LDFLAGS = "-L${pkgs.openssl.out}/lib -L${pkgs.zlib}/lib -L${pkgs.xz}/lib";
       CPPFLAGS = "-I${pkgs.openssl.out}/include -I${pkgs.zlib}/include -I${pkgs.xz}/include";
       PKG_CONFIG_PATH = "${pkgs.openssl.out}/lib/pkgconfig:${pkgs.zlib}/lib/pkgconfig:${pkgs.xz}/lib/pkgconfig";
@@ -71,11 +60,14 @@
     lfs.enable = true;
     userName = "marcalph";
     userEmail = "marcalph#protonmail.com";
+    ignores = [
+      "CLAUDE.md"
+      "TODO.md"
+    ];
   };
   programs.neovim.enable = true;
   programs.ripgrep.enable = true;
   programs.direnv.enable = true;
-  # programs.thefuck.enableZshIntegration = true; # replaced with pay-respects
   programs.zsh.enable = true;
   programs.zsh.enableCompletion = true;
   programs.zsh.autosuggestion.enable = true;
@@ -98,15 +90,13 @@
     mv = "mv -iv";
     projects = "cd $HOME/Projects";
     rm = "rm -iv";
-    nixswitch = "darwin-rebuild switch --flake flake.nix";
   };
-  # todo(marcalph): fix this
   programs.zsh.dirHashes = {
     docs  = "$HOME/Documents";
     vids  = "$HOME/Videos";
     dl    = "$HOME/Downloads";
   };
-  programs.zsh.initExtra = ''
+  programs.zsh.initContent = ''
     if [ -e "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh" ]; then
       source "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
     fi
@@ -123,21 +113,20 @@
     export XDG_CONFIG_HOME="$HOME/.config"
 
 
-    # eval $(thefuck --alias) # replaced with pay-respects
 
-    # Enable compinit and compdef
     autoload -Uz compinit
     compinit
     
-    # Bind aliases to their original commands
     compdef eza=ls
     compdef eza=ll
 
-    # ensure pyenv builds Python with xz/lzma support
     export LDFLAGS="-L${pkgs.xz}/lib -L${pkgs.zlib}/lib -L${pkgs.openssl.out}/lib"
     export CPPFLAGS="-I${pkgs.xz}/include -I${pkgs.zlib}/include -I${pkgs.openssl.out}/include"
     export PKG_CONFIG_PATH="${pkgs.xz}/lib/pkgconfig:${pkgs.zlib}/lib/pkgconfig:${pkgs.openssl.out}/lib/pkgconfig"
     export PYTHON_CONFIGURE_OPTS="--with-lzma --enable-shared"
+
+    # Initialize pay-respects for command correction
+    eval "$(pay-respects zsh)"
 
   '';
   programs.starship.enable = true;

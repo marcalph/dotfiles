@@ -1,29 +1,17 @@
 {pkgs, config, ... }: {
-  environment.systemPackages =
-    [
-      pkgs.home-manager
-    ];
-  # nix-daemon is now managed automatically when nix.enable is on
-  # Create /etc/zshrc that loads the nix-darwin environment.
-  programs.zsh.enable = true;
-  # Used for backwards compatibility, please read the changelog before changing.
-  # $ darwin-rebuild changelog
-  system.stateVersion = 4;
-  nix = {
-    enable = false; # Using Determinate installer
-    # package = pkgs.nix;
-    # settings = {
-    #   "extra-experimental-features" = [ "nix-command" "flakes" ];
-    # };
-  };
+  environment.systemPackages = [ pkgs.home-manager ];
   
-  # Set primary user for system defaults
+  programs.zsh.enable = true;
+  system.stateVersion = 4;
+  
+  # Disabled because using Determinate Systems Nix installer
+  nix.enable = false;
+  
+  # Required for newer nix-darwin (system defaults need a primary user)
   system.primaryUser = "marcalph";
-  # allow spotlight indexing
-  environment.pathsToLink = ["/Applications"];
-  # set some OSX preferences 
+  
+  environment.pathsToLink = ["/Applications"]; 
   system.defaults = {
-    # minimal dock
     dock = {
       autohide = true;
       orientation = "bottom";
@@ -45,7 +33,6 @@
       InitialKeyRepeat = 14;
       KeyRepeat = 1;
     };
-    # a finder that tells me what I want to know and lets me work
     finder = {
       AppleShowAllExtensions = true;
       ShowPathbar = true;
