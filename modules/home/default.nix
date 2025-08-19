@@ -35,6 +35,8 @@
       nodejs
       nodePackages.pnpm
       rustup
+      graphviz
+      anki
     ];
     sessionVariables = {
       PAGER = "less";
@@ -64,6 +66,9 @@
       "CLAUDE.md"
       "TODO.md"
     ];
+    extraConfig = {
+      init.defaultBranch = "main";
+    };
   };
   programs.neovim.enable = true;
   programs.ripgrep.enable = true;
