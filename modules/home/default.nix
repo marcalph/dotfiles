@@ -36,7 +36,8 @@
       nodePackages.pnpm
       rustup
       graphviz
-      anki
+      # anki package is broken, using anki-bin instead
+      anki-bin
     ];
     sessionVariables = {
       PAGER = "less";

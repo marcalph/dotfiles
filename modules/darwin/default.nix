@@ -1,5 +1,8 @@
 {pkgs, config, ... }: {
-  environment.systemPackages = [ pkgs.home-manager ];
+  environment.systemPackages = [ 
+    pkgs.home-manager
+    pkgs.anki-bin
+  ];
   
   programs.zsh.enable = true;
   system.stateVersion = 4;
@@ -25,6 +28,7 @@
         "/Applications/Notion.app"
         "/Applications/Notes.app"
         "/Applications/utilities/Terminal.app"
+        "/Applications/Nix Apps/Anki.app"
       ];
     };
     NSGlobalDomain = {
