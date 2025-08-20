@@ -38,6 +38,7 @@
       graphviz
       # anki package is broken, using anki-bin instead
       anki-bin
+      whatsapp-for-mac
     ];
     sessionVariables = {
       PAGER = "less";
