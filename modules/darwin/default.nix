@@ -1,7 +1,10 @@
 {pkgs, config, ... }: {
+  nixpkgs.config.allowUnfree = true;
+  
   environment.systemPackages = [ 
     pkgs.home-manager
     pkgs.anki-bin
+    pkgs.vscode
   ];
   
   programs.zsh.enable = true;
