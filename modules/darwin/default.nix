@@ -16,7 +16,20 @@
   # Required for newer nix-darwin (system defaults need a primary user)
   system.primaryUser = "marcalph";
   
-  environment.pathsToLink = ["/Applications"]; 
+  environment.pathsToLink = ["/Applications"];
+  
+  # Create proper app links for Spotlight indexing
+  system.activationScripts.applications.text = pkgs.lib.mkForce ''
+    echo "Setting up /Applications..." >&2
+    rm -rf /Applications/Nix\ Apps
+    mkdir -p /Applications/Nix\ Apps
+    find ${config.system.build.applications}/Applications -maxdepth 1 -type l | while IFS= read -r app; do
+      src="$(/usr/bin/stat -f%Y "$app")"
+      appname="$(basename "$app")"
+      echo "Copying $appname..."
+      /usr/bin/ditto "$src" "/Applications/Nix Apps/$appname" 2>/dev/null || true
+    done
+  ''; 
   system.defaults = {
     dock = {
       autohide = true;
