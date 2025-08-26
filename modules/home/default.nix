@@ -39,6 +39,7 @@
       # anki package is broken, using anki-bin instead
       anki-bin
       whatsapp-for-mac
+      rectangle
     ];
     sessionVariables = {
       PAGER = "less";
