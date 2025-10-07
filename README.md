@@ -33,6 +33,7 @@ Apply configuration changes:
 
 ```shell
 sudo darwin-rebuild switch --flake flake.nix
+❯ sudo darwin-rebuild build --flake .        
 ```
 
 **Note**: Recent nix-darwin updates require `sudo` for system activation.
