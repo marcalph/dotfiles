@@ -27,6 +27,7 @@
       turbo
       readline
       poetry
+      postgresql
       openssl
       openssl.dev
       zlib
@@ -46,9 +47,9 @@
       CLICLOLOR = 1;
       EDITOR = "nvim";
       # Critical build flags for Python packages requiring C extensions
-      LDFLAGS = "-L${pkgs.openssl.out}/lib -L${pkgs.zlib}/lib -L${pkgs.xz}/lib";
-      CPPFLAGS = "-I${pkgs.openssl.out}/include -I${pkgs.zlib}/include -I${pkgs.xz}/include";
-      PKG_CONFIG_PATH = "${pkgs.openssl.out}/lib/pkgconfig:${pkgs.zlib}/lib/pkgconfig:${pkgs.xz}/lib/pkgconfig";
+      LDFLAGS = "-L${pkgs.openssl.out}/lib -L${pkgs.zlib}/lib -L${pkgs.xz}/lib -L${pkgs.postgresql}/lib";
+      CPPFLAGS = "-I${pkgs.openssl.out}/include -I${pkgs.zlib}/include -I${pkgs.xz}/include -I${pkgs.postgresql}/include";
+      PKG_CONFIG_PATH = "${pkgs.openssl.out}/lib/pkgconfig:${pkgs.zlib}/lib/pkgconfig:${pkgs.xz}/lib/pkgconfig:${pkgs.postgresql}/lib/pkgconfig";
     };
     
   };
@@ -128,9 +129,9 @@
     compdef eza=ls
     compdef eza=ll
 
-    export LDFLAGS="-L${pkgs.xz}/lib -L${pkgs.zlib}/lib -L${pkgs.openssl.out}/lib"
-    export CPPFLAGS="-I${pkgs.xz}/include -I${pkgs.zlib}/include -I${pkgs.openssl.out}/include"
-    export PKG_CONFIG_PATH="${pkgs.xz}/lib/pkgconfig:${pkgs.zlib}/lib/pkgconfig:${pkgs.openssl.out}/lib/pkgconfig"
+    export LDFLAGS="-L${pkgs.xz}/lib -L${pkgs.zlib}/lib -L${pkgs.openssl.out}/lib -L${pkgs.postgresql}/lib"
+    export CPPFLAGS="-I${pkgs.xz}/include -I${pkgs.zlib}/include -I${pkgs.openssl.out}/include -I${pkgs.postgresql}/include"
+    export PKG_CONFIG_PATH="${pkgs.xz}/lib/pkgconfig:${pkgs.zlib}/lib/pkgconfig:${pkgs.openssl.out}/lib/pkgconfig:${pkgs.postgresql}/lib/pkgconfig"
     export PYTHON_CONFIGURE_OPTS="--with-lzma --enable-shared"
 
     # Initialize pay-respects for command correction
