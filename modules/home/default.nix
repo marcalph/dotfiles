@@ -137,6 +137,9 @@
     # Initialize pay-respects for command correction
     eval "$(pay-respects zsh)"
 
+    # Enable file path completion for uv commands
+    zstyle ':completion:*:*:uv:*' file-patterns '*'
+
   '';
   programs.starship.enable = true;
   programs.starship.enableZshIntegration = true;
