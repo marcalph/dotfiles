@@ -38,7 +38,7 @@
       graphviz
       # anki package is broken, using anki-bin instead
       anki-bin
-      whatsapp-for-mac
+      #whatsapp-for-mac
       rectangle
     ];
     sessionVariables = {
