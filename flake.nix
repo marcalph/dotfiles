@@ -38,6 +38,7 @@
           home-manager.darwinModules.home-manager
           {
             home-manager = {
+              useGlobalPkgs = true;
               # include the home-manager module
               users.marcalph = import ./modules/home;
             };
@@ -61,6 +62,7 @@
           home-manager.darwinModules.home-manager
           {
             home-manager = {
+              useGlobalPkgs = true;
               # include the home-manager module
               users.marcalph = import ./modules/home;
             };
