@@ -22,13 +22,14 @@
     # nix-darwin expects a darwinConfigurations key
     darwinConfigurations = {
       # my macbook air machine
-      air = 
+      air =
         # darwinSystem is a function inherited from the nix-darwin lib namespace
         inputs.nix-darwin.lib.darwinSystem {
           system = "aarch64-darwin"; # alternatively "x86_64-darwin"
           pkgs = import inputs.nixpkgs {
             system = "aarch64-darwin";
             config.allowUnfree = true;
+            overlays = [ inputs.nix-vscode-extensions.overlays.default ];
           };
         modules = [
           # include the nix-darwin module
@@ -37,7 +38,6 @@
           home-manager.darwinModules.home-manager
           {
             home-manager = {
-              extraSpecialArgs = { inherit inputs; };
               # include the home-manager module
               users.marcalph = import ./modules/home;
             };
@@ -45,13 +45,14 @@
           }
         ];
       };
-      rizoapro = 
+      rizoapro =
         # darwinSystem is a function inherited from the nix-darwin lib namespace
         inputs.nix-darwin.lib.darwinSystem {
           system = "aarch64-darwin"; # alternatively "x86_64-darwin"
           pkgs = import inputs.nixpkgs {
             system = "aarch64-darwin";
             config.allowUnfree = true;
+            overlays = [ inputs.nix-vscode-extensions.overlays.default ];
           };
         modules = [
           # include the nix-darwin module
@@ -60,7 +61,6 @@
           home-manager.darwinModules.home-manager
           {
             home-manager = {
-              extraSpecialArgs = { inherit inputs; };
               # include the home-manager module
               users.marcalph = import ./modules/home;
             };

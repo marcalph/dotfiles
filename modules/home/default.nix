@@ -1,8 +1,5 @@
-{ config, pkgs, lib, inputs, ... }:
+{ config, pkgs, lib, ... }:
 
-let
-  marketplace = inputs.nix-vscode-extensions.extensions.${pkgs.system}.vscode-marketplace;
-in
 {
   nixpkgs.config = {
     allowUnfree = true;
@@ -150,7 +147,7 @@ in
   programs.vscode = {
     enable = true;
     profiles.default = {
-      extensions = with marketplace; [
+      extensions = with pkgs.vscode-marketplace; [
         bbenoist.nix
         hashicorp.terraform
         hashicorp.hcl
