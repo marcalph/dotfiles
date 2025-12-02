@@ -151,15 +151,46 @@
       extensions = with pkgs.vscode-extensions; [
         bbenoist.nix
         hashicorp.terraform
+        hashicorp.hcl
         ms-azuretools.vscode-docker
         ms-python.python
         ms-python.vscode-pylance
         ms-toolsai.jupyter
+        ms-toolsai.jupyter-keymap
+        ms-toolsai.jupyter-renderers
         ms-vsliveshare.vsliveshare
         tamasfe.even-better-toml
         eamodio.gitlens
+        gruntfuggly.todo-tree
+        shd101wyy.markdown-preview-enhanced
+      ] ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
+        {
+          name = "rainbow-csv";
+          publisher = "mechatroner";
+          version = "3.23.0";
+          sha256 = "";
+        }
+        {
+          name = "plantuml";
+          publisher = "jebbs";
+          version = "2.18.1";
+          sha256 = "";
+        }
+        {
+          name = "json-tools";
+          publisher = "eriklynd";
+          version = "1.0.2";
+          sha256 = "";
+        }
+        {
+          name = "excalidraw-editor";
+          publisher = "pomdtr";
+          version = "3.9.0";
+          sha256 = "";
+        }
       ];
       userSettings = {
+        "update.mode" = "none";
         "terminal.integrated.fontFamily" = "Hack Nerd Font Mono";
         "editor.fontFamily" = "Menlo, Monaco, 'Courier New', monospace";
         "files.autoSave" = "afterDelay";
