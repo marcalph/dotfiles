@@ -7,6 +7,7 @@
   home = {
     stateVersion = "24.11";
     packages = with pkgs; [
+      anki-bin
       magic-wormhole
       google-cloud-sql-proxy
       google-cloud-sdk
