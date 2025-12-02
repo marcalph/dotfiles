@@ -11,7 +11,6 @@
       google-cloud-sql-proxy
       google-cloud-sdk
       speedtest-cli
-      poppler_utils
       python313
       uv
       ngrok
