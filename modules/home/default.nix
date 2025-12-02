@@ -6,17 +6,6 @@
   };
   home = {
     stateVersion = "24.11";
-
-    # Link apps to ~/Applications for Spotlight/Finder
-    activation.linkApps = lib.hm.dag.entryAfter ["writeBoundary"] ''
-      app_path="$HOME/Applications/Home Manager Apps"
-      rm -rf "$app_path"
-      mkdir -p "$app_path"
-      for app in $(find "$HOME/.nix-profile/Applications" -maxdepth 1 -name "*.app" 2>/dev/null); do
-        $DRY_RUN_CMD ln -sf "$app" "$app_path/$(basename "$app")"
-      done
-    '';
-
     packages = with pkgs; [
       anki-bin
       magic-wormhole
