@@ -161,11 +161,10 @@
         tamasfe.even-better-toml
         eamodio.gitlens
         gruntfuggly.todo-tree
-        shd101wyy.markdown-preview-enhanced
         mechatroner.rainbow-csv
-        jebbs.plantuml
         eriklynd.json-tools
         pomdtr.excalidraw-editor
+        bierner.markdown-mermaid
       ];
       userSettings = {
         "update.mode" = "none";
