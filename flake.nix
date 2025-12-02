@@ -19,6 +19,11 @@
       url = "github:nix-community/nix-vscode-extensions";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    # handles macOS app linking for Spotlight/Finder
+    mac-app-util = {
+      url = "github:hrban/mac-app-util";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = inputs@{ nixpkgs, home-manager, nix-darwin, ... }:{
@@ -32,11 +37,16 @@
           pkgs = import inputs.nixpkgs {
             system = "aarch64-darwin";
             config.allowUnfree = true;
-            overlays = [ inputs.nix-vscode-extensions.overlays.default ];
+            overlays = [
+              inputs.nix-vscode-extensions.overlays.default
+              inputs.mac-app-util.overlays.default
+            ];
           };
         modules = [
           # include the nix-darwin module
           ./modules/darwin
+          # include mac-app-util darwin module
+          inputs.mac-app-util.darwinModules.default
           # setup home-manager
           home-manager.darwinModules.home-manager
           {
@@ -44,6 +54,9 @@
               useGlobalPkgs = true;
               # include the home-manager module
               users.marcalph = import ./modules/home;
+              sharedModules = [
+                inputs.mac-app-util.homeManagerModules.default
+              ];
             };
             users.users.marcalph.home = "/Users/marcalph";
           }
@@ -56,11 +69,16 @@
           pkgs = import inputs.nixpkgs {
             system = "aarch64-darwin";
             config.allowUnfree = true;
-            overlays = [ inputs.nix-vscode-extensions.overlays.default ];
+            overlays = [
+              inputs.nix-vscode-extensions.overlays.default
+              inputs.mac-app-util.overlays.default
+            ];
           };
         modules = [
           # include the nix-darwin module
           ./modules/darwin
+          # include mac-app-util darwin module
+          inputs.mac-app-util.darwinModules.default
           # setup home-manager
           home-manager.darwinModules.home-manager
           {
@@ -68,6 +86,9 @@
               useGlobalPkgs = true;
               # include the home-manager module
               users.marcalph = import ./modules/home;
+              sharedModules = [
+                inputs.mac-app-util.homeManagerModules.default
+              ];
             };
             users.users.marcalph.home = "/Users/marcalph";
           }
