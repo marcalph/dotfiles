@@ -14,6 +14,8 @@
       url = "github:lnl7/nix-darwin/master";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    # fresh vscode extensions from marketplace
+    nix-vscode-extensions.url = "github:nix-community/nix-vscode-extensions";
   };
 
   outputs = inputs@{ nixpkgs, home-manager, nix-darwin, ... }:{
@@ -34,7 +36,8 @@
           # setup home-manager
           home-manager.darwinModules.home-manager
           {
-            home-manager = {              
+            home-manager = {
+              extraSpecialArgs = { inherit inputs; };
               # include the home-manager module
               users.marcalph = import ./modules/home;
             };
@@ -56,14 +59,15 @@
           # setup home-manager
           home-manager.darwinModules.home-manager
           {
-            home-manager = {             
+            home-manager = {
+              extraSpecialArgs = { inherit inputs; };
               # include the home-manager module
               users.marcalph = import ./modules/home;
             };
             users.users.marcalph.home = "/Users/marcalph";
           }
         ];
-      };  
+      };
     };
     # Add devShell for development
     # Correct devShell using pkgs.mkShell

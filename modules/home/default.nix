@@ -1,5 +1,8 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, inputs, ... }:
 
+let
+  marketplace = inputs.nix-vscode-extensions.extensions.${pkgs.system}.vscode-marketplace;
+in
 {
   nixpkgs.config = {
     allowUnfree = true;
@@ -147,7 +150,7 @@
   programs.vscode = {
     enable = true;
     profiles.default = {
-      extensions = with pkgs.vscode-extensions; [
+      extensions = with marketplace; [
         bbenoist.nix
         hashicorp.terraform
         hashicorp.hcl
@@ -162,31 +165,10 @@
         eamodio.gitlens
         gruntfuggly.todo-tree
         shd101wyy.markdown-preview-enhanced
-      ] ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
-        {
-          name = "rainbow-csv";
-          publisher = "mechatroner";
-          version = "3.23.0";
-          sha256 = "sha256-HEbx7vjuVFjAG0koFI/JRehivRiLBF0cgx24LhdwCBc=";
-        }
-        {
-          name = "plantuml";
-          publisher = "jebbs";
-          version = "2.18.1";
-          sha256 = "sha256-o4FN/vUEK53ZLz5vAniUcnKDjWaKKH0oPZMbXVarDng=";
-        }
-        {
-          name = "json-tools";
-          publisher = "eriklynd";
-          version = "1.0.2";
-          sha256 = "sha256-7tBjhcqCUnwOXwjhLK8iYtXH/my6ATpWvgrfDNi8tzw=";
-        }
-        {
-          name = "excalidraw-editor";
-          publisher = "pomdtr";
-          version = "3.9.0";
-          sha256 = "sha256-DTmlHiMKnRUOEY8lsPe7JLASEAXmfqfUJdBkV0t08c0=";
-        }
+        mechatroner.rainbow-csv
+        jebbs.plantuml
+        eriklynd.json-tools
+        pomdtr.excalidraw-editor
       ];
       userSettings = {
         "update.mode" = "none";
