@@ -12,7 +12,7 @@
       google-cloud-sql-proxy
       google-cloud-sdk
       speedtest-cli
-      python313
+      (python313.withPackages (ps: [ ps.tkinter ]))
       uv
       ngrok
       pkgs.nerd-fonts.hack
@@ -37,6 +37,9 @@
       nodePackages.pnpm
       rustup
       graphviz
+      # Tcl/Tk for Python tkinter support (not bundled with uv's standalone Python)
+      tcl
+      tk
       # anki package is broken, using anki-bin instead
       anki-bin
       #whatsapp-for-mac
@@ -46,10 +49,13 @@
       PAGER = "less";
       CLICLOLOR = 1;
       EDITOR = "nvim";
+      # Tcl/Tk paths for Python tkinter support
+      TCL_LIBRARY = "${pkgs.tcl}/lib/tcl8.6";
+      TK_LIBRARY = "${pkgs.tk}/lib/tk8.6";
       # Critical build flags for Python packages requiring C extensions
-      LDFLAGS = "-L${pkgs.openssl.out}/lib -L${pkgs.zlib}/lib -L${pkgs.xz}/lib -L${pkgs.postgresql}/lib";
-      CPPFLAGS = "-I${pkgs.openssl.out}/include -I${pkgs.zlib}/include -I${pkgs.xz}/include -I${pkgs.postgresql}/include";
-      PKG_CONFIG_PATH = "${pkgs.openssl.out}/lib/pkgconfig:${pkgs.zlib}/lib/pkgconfig:${pkgs.xz}/lib/pkgconfig:${pkgs.postgresql}/lib/pkgconfig";
+      LDFLAGS = "-L${pkgs.openssl.out}/lib -L${pkgs.zlib}/lib -L${pkgs.xz}/lib -L${pkgs.postgresql}/lib -L${pkgs.tcl}/lib -L${pkgs.tk}/lib";
+      CPPFLAGS = "-I${pkgs.openssl.out}/include -I${pkgs.zlib}/include -I${pkgs.xz}/include -I${pkgs.postgresql}/include -I${pkgs.tcl}/include -I${pkgs.tk}/include";
+      PKG_CONFIG_PATH = "${pkgs.openssl.out}/lib/pkgconfig:${pkgs.zlib}/lib/pkgconfig:${pkgs.xz}/lib/pkgconfig:${pkgs.postgresql}/lib/pkgconfig:${pkgs.tcl}/lib/pkgconfig:${pkgs.tk}/lib/pkgconfig";
     };
     
   };
@@ -129,10 +135,13 @@
     compdef eza=ls
     compdef eza=ll
 
-    export LDFLAGS="-L${pkgs.xz}/lib -L${pkgs.zlib}/lib -L${pkgs.openssl.out}/lib -L${pkgs.postgresql}/lib"
-    export CPPFLAGS="-I${pkgs.xz}/include -I${pkgs.zlib}/include -I${pkgs.openssl.out}/include -I${pkgs.postgresql}/include"
-    export PKG_CONFIG_PATH="${pkgs.xz}/lib/pkgconfig:${pkgs.zlib}/lib/pkgconfig:${pkgs.openssl.out}/lib/pkgconfig:${pkgs.postgresql}/lib/pkgconfig"
+    export LDFLAGS="-L${pkgs.xz}/lib -L${pkgs.zlib}/lib -L${pkgs.openssl.out}/lib -L${pkgs.postgresql}/lib -L${pkgs.tcl}/lib -L${pkgs.tk}/lib"
+    export CPPFLAGS="-I${pkgs.xz}/include -I${pkgs.zlib}/include -I${pkgs.openssl.out}/include -I${pkgs.postgresql}/include -I${pkgs.tcl}/include -I${pkgs.tk}/include"
+    export PKG_CONFIG_PATH="${pkgs.xz}/lib/pkgconfig:${pkgs.zlib}/lib/pkgconfig:${pkgs.openssl.out}/lib/pkgconfig:${pkgs.postgresql}/lib/pkgconfig:${pkgs.tcl}/lib/pkgconfig:${pkgs.tk}/lib/pkgconfig"
     export PYTHON_CONFIGURE_OPTS="--with-lzma --enable-shared"
+    # Tcl/Tk paths for Python tkinter support
+    export TCL_LIBRARY="${pkgs.tcl}/lib/tcl8.6"
+    export TK_LIBRARY="${pkgs.tk}/lib/tk8.6"
 
     # Initialize pay-respects for command correction
     eval "$(pay-respects zsh)"
