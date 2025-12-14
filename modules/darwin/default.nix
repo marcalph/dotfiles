@@ -22,11 +22,10 @@
       show-recents = false;
       static-only = true;
       persistent-apps = [
-        "/Applications/Slack.app"
-        "/Applications/Firefox.app"
+        "/Users/marcalph/Applications/Home Manager Apps/Slack.app"
+        "/Users/marcalph/Applications/Home Manager Apps/Firefox.app"
         "/Users/marcalph/Applications/Home Manager Apps/Visual Studio Code.app"
-        "/Applications/Notion.app"
-        "/Applications/Notes.app"
+        "/Users/marcalph/Applications/Home Manager Apps/Obsidian.app"
         "/System/Applications/Utilities/Terminal.app"
         "/Users/marcalph/Applications/Home Manager Apps/Anki.app"
         "/Users/marcalph/Applications/Home Manager Apps/Rectangle.app"

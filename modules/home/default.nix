@@ -7,6 +7,9 @@
   home = {
     stateVersion = "24.11";
     packages = with pkgs; [
+      firefox
+      slack
+      obsidian
       anki-bin
       magic-wormhole
       google-cloud-sql-proxy
