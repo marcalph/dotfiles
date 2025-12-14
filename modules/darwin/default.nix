@@ -26,6 +26,7 @@
         "/Users/marcalph/Applications/Home Manager Apps/Firefox.app"
         "/Users/marcalph/Applications/Home Manager Apps/Visual Studio Code.app"
         "/Users/marcalph/Applications/Home Manager Apps/Obsidian.app"
+        "/Users/marcalph/Applications/Home Manager Apps/Bitwarden.app"
         "/System/Applications/Utilities/Terminal.app"
         "/Users/marcalph/Applications/Home Manager Apps/Anki.app"
         "/Users/marcalph/Applications/Home Manager Apps/Rectangle.app"

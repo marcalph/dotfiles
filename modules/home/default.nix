@@ -7,9 +7,10 @@
   home = {
     stateVersion = "24.11";
     packages = with pkgs; [
-      firefox
       slack
       obsidian
+      bitwarden-desktop
+      bitwarden-cli
       anki-bin
       magic-wormhole
       google-cloud-sql-proxy
@@ -193,6 +194,35 @@
         "github.copilot.nextEditSuggestions.enabled" = false;
         "workbench.editor.empty.hint" = "hidden";
         "update.showReleaseNotes" = false;
+      };
+    };
+  };
+
+  programs.firefox = {
+    enable = true;
+    profiles.default = {
+      isDefault = true;
+      extensions.packages = with pkgs.nur.repos.rycee.firefox-addons; [
+        bitwarden
+        ublock-origin
+        privacy-badger
+        # captainfact - not in NUR, install manually
+        # postlight-reader - not in NUR, install manually
+        # tomato-clock - not in NUR, install manually
+      ];
+      settings = {
+        # Disable telemetry
+        "toolkit.telemetry.enabled" = false;
+        "browser.newtabpage.activity-stream.feeds.telemetry" = false;
+        # Enable HTTPS-only mode
+        "dom.security.https_only_mode" = true;
+        # Disable pocket
+        "extensions.pocket.enabled" = false;
+        # Force English to prevent auto-translated sites
+        "intl.accept_languages" = "en-US,en";
+        "intl.locale.requested" = "en-US";
+        # Auto-enable extensions installed via nix
+        "extensions.autoDisableScopes" = 0;
       };
     };
   };

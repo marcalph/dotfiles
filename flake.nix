@@ -19,6 +19,8 @@
       url = "github:nix-community/nix-vscode-extensions";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    # Nix User Repository (for firefox extensions)
+    nur.url = "github:nix-community/NUR";
   };
 
   outputs = inputs@{ nixpkgs, home-manager, nix-darwin, ... }:{
@@ -34,6 +36,7 @@
             config.allowUnfree = true;
             overlays = [
               inputs.nix-vscode-extensions.overlays.default
+              inputs.nur.overlays.default
             ];
           };
         modules = [
@@ -61,6 +64,7 @@
             config.allowUnfree = true;
             overlays = [
               inputs.nix-vscode-extensions.overlays.default
+              inputs.nur.overlays.default
             ];
           };
         modules = [
