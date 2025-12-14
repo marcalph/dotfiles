@@ -44,6 +44,7 @@
           {
             home-manager = {
               useGlobalPkgs = true;
+              backupFileExtension = "backup";
               # include the home-manager module
               users.marcalph = import ./modules/home;
             };
@@ -70,6 +71,7 @@
           {
             home-manager = {
               useGlobalPkgs = true;
+              backupFileExtension = "backup";
               # include the home-manager module
               users.marcalph = import ./modules/home;
             };

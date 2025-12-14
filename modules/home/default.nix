@@ -70,13 +70,13 @@
   programs.git = {
     enable = true;
     lfs.enable = true;
-    userName = "marcalph";
-    userEmail = "marcalph#protonmail.com";
     ignores = [
       "CLAUDE.md"
       "TODO.md"
     ];
-    extraConfig = {
+    settings = {
+      user.name = "marcalph";
+      user.email = "marcalph@protonmail.com";
       init.defaultBranch = "main";
     };
   };
@@ -157,25 +157,29 @@
   programs.vscode = {
     enable = true;
     profiles.default = {
-      extensions = with pkgs.vscode-marketplace; [
+      extensions = with pkgs.vscode-extensions; [
+        # From nixpkgs (more stable)
         bbenoist.nix
         hashicorp.terraform
-        hashicorp.hcl
         ms-azuretools.vscode-docker
         ms-python.python
         ms-python.vscode-pylance
         ms-toolsai.jupyter
-        ms-toolsai.jupyter-keymap
-        ms-toolsai.jupyter-renderers
         ms-vsliveshare.vsliveshare
         tamasfe.even-better-toml
         eamodio.gitlens
-        gruntfuggly.todo-tree
-        mechatroner.rainbow-csv
-        eriklynd.json-tools
-        pomdtr.excalidraw-editor
-        bierner.markdown-mermaid
       ];
+      # Marketplace extensions commented out - can re-enable after debugging unzip issue
+      # ++ (with pkgs.vscode-marketplace; [
+      #   hashicorp.hcl
+      #   ms-toolsai.jupyter-keymap
+      #   ms-toolsai.jupyter-renderers
+      #   gruntfuggly.todo-tree
+      #   mechatroner.rainbow-csv
+      #   eriklynd.json-tools
+      #   pomdtr.excalidraw-editor
+      #   bierner.markdown-mermaid
+      # ]);
       userSettings = {
         "update.mode" = "none";
         "terminal.integrated.fontFamily" = "Hack Nerd Font Mono";
