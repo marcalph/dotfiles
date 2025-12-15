@@ -3,6 +3,7 @@
   
   environment.systemPackages = [
     pkgs.home-manager
+    pkgs.firefox  # System-level for LaunchServices registration
   ];
   
   programs.zsh.enable = true;
@@ -23,7 +24,7 @@
       static-only = true;
       persistent-apps = [
         "/Users/marcalph/Applications/Home Manager Apps/Slack.app"
-        "/Users/marcalph/Applications/Home Manager Apps/Firefox.app"
+        "/Applications/Nix Apps/Firefox.app"
         "/Users/marcalph/Applications/Home Manager Apps/Visual Studio Code.app"
         "/Users/marcalph/Applications/Home Manager Apps/Obsidian.app"
         "/Users/marcalph/Applications/Home Manager Apps/Bitwarden.app"
