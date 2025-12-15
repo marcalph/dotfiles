@@ -283,6 +283,12 @@
         "intl.locale.requested" = "en-US";
         # Auto-enable extensions installed via nix
         "extensions.autoDisableScopes" = 0;
+        # Touch ID / WebAuthn platform authenticator (macOS Sequoia+)
+        "security.webauthn.ctap2" = true;
+        "security.webauthn.enable_usbtoken" = true;
+        "security.webauthn.enable_softtoken" = false;
+        "security.webauthn.webauthn_enable_macos_passkeys" = true;
+        "security.webauthn.enable_macos_passkeys" = true;
       };
     };
   };
