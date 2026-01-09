@@ -1,5 +1,5 @@
 apps/
 hosts/
 overlays/
-result/
-CLAUDE.mdresult
+result
+CLAUDE.md
