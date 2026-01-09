@@ -173,18 +173,12 @@
         ms-vsliveshare.vsliveshare
         tamasfe.even-better-toml
         eamodio.gitlens
-      ];
-      # Marketplace extensions commented out - can re-enable after debugging unzip issue
+      ]
+      # Additional marketplace extensions can be added here:
       # ++ (with pkgs.vscode-marketplace; [
-      #   hashicorp.hcl
-      #   ms-toolsai.jupyter-keymap
-      #   ms-toolsai.jupyter-renderers
-      #   gruntfuggly.todo-tree
-      #   mechatroner.rainbow-csv
-      #   eriklynd.json-tools
-      #   pomdtr.excalidraw-editor
-      #   bierner.markdown-mermaid
+      #   google.colab  # installed manually from marketplace
       # ]);
+      ;
       userSettings = {
         "update.mode" = "none";
         "terminal.integrated.fontFamily" = "Hack Nerd Font Mono";
