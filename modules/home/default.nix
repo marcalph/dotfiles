@@ -23,6 +23,7 @@
       shellcheck
       pay-respects
       jq
+      pandoc
       pre-commit
       tldr
       ranger
