@@ -49,6 +49,8 @@
       anki-bin
       #whatsapp-for-mac
       rectangle
+      # Audio/video processing
+      ffmpeg-full
     ];
     sessionVariables = {
       PAGER = "less";
