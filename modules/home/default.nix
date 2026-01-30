@@ -131,7 +131,7 @@
 
     for index ({1..9}) alias "$index"="cd +$index"; unset index
 
-    export PATH=~/.local/bin:/usr/local/bin:$PATH
+    export PATH=~/.cargo/bin:~/.local/bin:/usr/local/bin:$PATH
     export XDG_CONFIG_HOME="$HOME/.config"
 
 
