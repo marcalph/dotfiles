@@ -175,6 +175,7 @@
         ms-vsliveshare.vsliveshare
         tamasfe.even-better-toml
         eamodio.gitlens
+        rust-lang.rust-analyzer
       ]
       # Additional marketplace extensions can be added here:
       # ++ (with pkgs.vscode-marketplace; [
