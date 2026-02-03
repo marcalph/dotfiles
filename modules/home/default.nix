@@ -170,6 +170,7 @@
         hashicorp.terraform
         ms-azuretools.vscode-docker
         ms-python.python
+        ms-vscode.cpptools
         ms-python.vscode-pylance
         ms-toolsai.jupyter
         ms-vsliveshare.vsliveshare
