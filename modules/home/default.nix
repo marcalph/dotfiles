@@ -177,6 +177,7 @@
         tamasfe.even-better-toml
         eamodio.gitlens
         rust-lang.rust-analyzer
+        ms-vscode-remote.remote-ssh
       ]
       # Additional marketplace extensions can be added here:
       # ++ (with pkgs.vscode-marketplace; [
