@@ -55,7 +55,8 @@
     sessionVariables = {
       PAGER = "less";
       CLICLOLOR = 1;
-      EDITOR = "nvim";
+      VISUAL = "code --wait";
+      EDITOR = "code --wait";
       # Tcl/Tk paths for Python tkinter support
       TCL_LIBRARY = "${pkgs.tcl}/lib/tcl8.6";
       TK_LIBRARY = "${pkgs.tk}/lib/tk8.6";
