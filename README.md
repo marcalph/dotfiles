@@ -61,4 +61,3 @@ This provides gcc, make, and libraries needed for compiling Python packages with
 - **modules/darwin/**: System-level macOS settings
 - **modules/home/**: User environment and packages
 
-See `CLAUDE.md` for detailed development guidance.  
