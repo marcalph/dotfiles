@@ -7,10 +7,6 @@
   home = {
     stateVersion = "24.11";
     packages = with pkgs; [
-      slack
-      discord
-      obsidian
-      bitwarden-desktop
       bitwarden-cli
       anki-bin
       magic-wormhole

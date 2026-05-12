@@ -4,6 +4,11 @@
   environment.systemPackages = [
     pkgs.home-manager
     pkgs.firefox  # System-level for LaunchServices registration
+    pkgs.obsidian
+    pkgs.slack
+    pkgs.discord
+    pkgs.bitwarden-desktop
+    pkgs.vscode
   ];
   
   programs.zsh.enable = true;
@@ -25,7 +30,7 @@
       persistent-apps = [
         "/Users/marcalph/Applications/Home Manager Apps/Slack.app"
         "/Applications/Nix Apps/Firefox.app"
-        "/Users/marcalph/Applications/Home Manager Apps/Visual Studio Code.app"
+        "/Applications/Nix Apps/Visual Studio Code.app"
         "/Users/marcalph/Applications/Home Manager Apps/Obsidian.app"
         "/Users/marcalph/Applications/Home Manager Apps/Bitwarden.app"
         "/Users/marcalph/Applications/Home Manager Apps/kitty.app"
