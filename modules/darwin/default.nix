@@ -9,6 +9,7 @@
     pkgs.discord
     pkgs.bitwarden-desktop
     pkgs.vscode
+    pkgs.kitty
   ];
   
   programs.zsh.enable = true;
