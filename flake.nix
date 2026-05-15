@@ -2,65 +2,57 @@
   description = "My darwin system";
 
   inputs = {
-    # pin nixpkgs and home-manager version
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
-    # manages config and links stuff into homedir
     home-manager = {
       url = "github:nix-community/home-manager/master";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    # control system level config for macOS
     nix-darwin = {
       url = "github:lnl7/nix-darwin/master";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    # fresh vscode extensions from marketplace
     nix-vscode-extensions = {
       url = "github:nix-community/nix-vscode-extensions";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     # Nix User Repository (for firefox extensions)
     nur.url = "github:nix-community/NUR";
+    helix.url = "github:helix-editor/helix/master";
   };
 
   outputs = inputs@{ nixpkgs, home-manager, nix-darwin, ... }:{
-    # nix-darwin expects a darwinConfigurations key
     darwinConfigurations = {
-      # my macbook air machine
       air =
-        # darwinSystem is a function inherited from the nix-darwin lib namespace
         inputs.nix-darwin.lib.darwinSystem {
-          system = "aarch64-darwin"; # alternatively "x86_64-darwin"
+          system = "aarch64-darwin"; 
           pkgs = import inputs.nixpkgs {
-            system = "aarch64-darwin";
             config.allowUnfree = true;
             overlays = [
               inputs.nix-vscode-extensions.overlays.default
               inputs.nur.overlays.default
             ];
           };
-        modules = [
-          # include the nix-darwin module
-          ./modules/darwin
-          # setup home-manager
-          home-manager.darwinModules.home-manager
-          {
-            home-manager = {
-              useGlobalPkgs = true;
-              backupFileExtension = "backup";
-              # include the home-manager module
-              users.marcalph = import ./modules/home;
-            };
-            users.users.marcalph.home = "/Users/marcalph";
-          }
-        ];
-      };
+          # Set all inputs parameters as special arguments for all submodules
+          specialArgs = { inherit inputs; };
+          modules = [
+            ./modules/darwin
+            home-manager.darwinModules.home-manager
+            {
+              home-manager = {
+                useGlobalPkgs = true;
+                backupFileExtension = "backup";
+                # include the home-manager module
+                users.marcalph = import ./modules/home;
+              };
+              users.users.marcalph.home = "/Users/marcalph";
+            }
+          ];
+        };
       rizoapro =
         # darwinSystem is a function inherited from the nix-darwin lib namespace
         inputs.nix-darwin.lib.darwinSystem {
           system = "aarch64-darwin"; # alternatively "x86_64-darwin"
           pkgs = import inputs.nixpkgs {
-            system = "aarch64-darwin";
             config.allowUnfree = true;
             overlays = [
               inputs.nix-vscode-extensions.overlays.default

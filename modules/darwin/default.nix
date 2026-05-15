@@ -1,15 +1,17 @@
-{pkgs, config, ... }: {
+{pkgs, config, inputs,... }: {
   nixpkgs.config.allowUnfree = true;
   
   environment.systemPackages = [
     pkgs.home-manager
-    pkgs.firefox  # System-level for LaunchServices registration
+    pkgs.firefox  # System-level for Spotlight registration
     pkgs.obsidian
     pkgs.slack
     pkgs.discord
     pkgs.bitwarden-desktop
     pkgs.vscode
     pkgs.kitty
+    pkgs.anki-bin
+    inputs.helix.packages."${pkgs.stdenv.hostPlatform.system}".helix
   ];
   
   programs.zsh.enable = true;
@@ -29,14 +31,13 @@
       show-recents = false;
       static-only = true;
       persistent-apps = [
-        "/Users/marcalph/Applications/Home Manager Apps/Slack.app"
         "/Applications/Nix Apps/Firefox.app"
         "/Applications/Nix Apps/Visual Studio Code.app"
-        "/Users/marcalph/Applications/Home Manager Apps/Obsidian.app"
-        "/Users/marcalph/Applications/Home Manager Apps/Bitwarden.app"
-        "/Users/marcalph/Applications/Home Manager Apps/kitty.app"
-        "/Users/marcalph/Applications/Home Manager Apps/Anki.app"
-        "/Users/marcalph/Applications/Home Manager Apps/Rectangle.app"
+        "/Applications/Nix Apps/Obsidian.app"
+        "/Applications/Nix Apps/Bitwarden.app"
+        "/Applications/Nix Apps/kitty.app"
+        "/Applications/Nix Apps/Anki.app"
+        "/Applications/Nix Apps/Rectangle.app"
       ];
     };
     NSGlobalDomain = {

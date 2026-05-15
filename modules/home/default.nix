@@ -42,10 +42,6 @@
       # Tcl/Tk for Python tkinter support (not bundled with uv's standalone Python)
       tcl
       tk
-      # anki package is broken, using anki-bin instead
-      anki-bin
-      #whatsapp-for-mac
-      rectangle
       # Audio/video processing
       ffmpeg-full
     ];
