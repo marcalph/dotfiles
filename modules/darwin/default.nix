@@ -3,6 +3,7 @@
   
   environment.systemPackages = [
     pkgs.home-manager
+    pkgs.rectangle
     pkgs.firefox  # System-level for Spotlight registration
     pkgs.obsidian
     pkgs.slack

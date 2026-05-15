@@ -26,6 +26,8 @@
         inputs.nix-darwin.lib.darwinSystem {
           system = "aarch64-darwin"; 
           pkgs = import inputs.nixpkgs {
+            system = "aarch64-darwin"; 
+
             config.allowUnfree = true;
             overlays = [
               inputs.nix-vscode-extensions.overlays.default
@@ -53,6 +55,7 @@
         inputs.nix-darwin.lib.darwinSystem {
           system = "aarch64-darwin"; # alternatively "x86_64-darwin"
           pkgs = import inputs.nixpkgs {
+            system = "aarch64-darwin"; 
             config.allowUnfree = true;
             overlays = [
               inputs.nix-vscode-extensions.overlays.default
