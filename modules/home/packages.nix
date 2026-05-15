@@ -3,7 +3,6 @@
 {
   home.packages = with pkgs; [
     bitwarden-cli
-    anki-bin
     magic-wormhole
     google-cloud-sql-proxy
     google-cloud-sdk
@@ -23,7 +22,6 @@
     pkg-config
     turbo
     readline
-    poetry
     postgresql
     openssl
     openssl.dev

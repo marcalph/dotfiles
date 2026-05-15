@@ -23,7 +23,7 @@ nix run nix-darwin --extra-experimental-features nix-command --extra-experimenta
 
 
 ```shell
-sudo darwin-rebuild switch --flake flake.nix
+sudo darwin-rebuild switch --flake flake.nix --show-trace -L -v
 sudo nixos-rebuild switch --flake /path/to/your/flake#your-hostname
 ```
 
