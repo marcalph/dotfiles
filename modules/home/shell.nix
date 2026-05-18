@@ -41,12 +41,6 @@
     dl   = "$HOME/Downloads";
   };
   programs.zsh.initContent = ''
-    if [ -e "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh" ]; then
-      source "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
-    fi
-    if [ -e "/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh" ]; then
-      source "/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh"
-    fi
     setopt AUTO_PUSHD           # Push the current directory visited on the stack.
     setopt PUSHD_IGNORE_DUPS    # Do not store duplicates in the stack.
     setopt PUSHD_SILENT         # Do not print the directory stack after pushd or popd.
@@ -56,17 +50,12 @@
     export PATH=~/.cargo/bin:~/.local/bin:/usr/local/bin:$PATH
     export XDG_CONFIG_HOME="$HOME/.config"
 
-
-
     autoload -Uz compinit
     compinit
 
     compdef eza=ls
     compdef eza=ll
 
-    export LDFLAGS="-L${pkgs.xz}/lib -L${pkgs.zlib}/lib -L${pkgs.openssl.out}/lib -L${pkgs.postgresql}/lib -L${pkgs.tcl}/lib -L${pkgs.tk}/lib"
-    export CPPFLAGS="-I${pkgs.xz}/include -I${pkgs.zlib}/include -I${pkgs.openssl.out}/include -I${pkgs.postgresql}/include -I${pkgs.tcl}/include -I${pkgs.tk}/include"
-    export PKG_CONFIG_PATH="${pkgs.xz}/lib/pkgconfig:${pkgs.zlib}/lib/pkgconfig:${pkgs.openssl.out}/lib/pkgconfig:${pkgs.postgresql}/lib/pkgconfig:${pkgs.tcl}/lib/pkgconfig:${pkgs.tk}/lib/pkgconfig"
     export PYTHON_CONFIGURE_OPTS="--with-lzma --enable-shared"
     # Tcl/Tk paths for Python tkinter support
     export TCL_LIBRARY="${pkgs.tcl}/lib/tcl8.6"
