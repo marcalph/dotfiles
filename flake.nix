@@ -26,7 +26,7 @@
     in {
     darwinConfigurations = {
       air = helpers.mkDarwin "air";
-      rizoapro = helpers.mkDarwin "rizoapro";
+      pro = helpers.mkDarwin "pro";
     };
     # Add devShell for development
     # Correct devShell using pkgs.mkShell

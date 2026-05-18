@@ -16,6 +16,7 @@ in {
       specialArgs = { inherit inputs hostname; };
       modules = [
         ../modules/darwin
+        ../modules/hosts/${hostname}.nix
         home-manager.darwinModules.home-manager
         {
           home-manager = {

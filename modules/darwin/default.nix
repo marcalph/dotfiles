@@ -1,4 +1,4 @@
-{pkgs, config, inputs,... }: {
+{pkgs, config, lib, inputs,... }: {
   nixpkgs.config.allowUnfree = true;
   
   environment.systemPackages = [
@@ -31,7 +31,7 @@
       show-process-indicators = false;
       show-recents = false;
       static-only = true;
-      persistent-apps = [
+      persistent-apps = lib.mkDefault [
         "/Applications/Nix Apps/Firefox.app"
         "/Applications/Nix Apps/Visual Studio Code.app"
         "/Applications/Nix Apps/Obsidian.app"
