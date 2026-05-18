@@ -20,64 +20,13 @@
     helix.url = "github:helix-editor/helix/master";
   };
 
-  outputs = inputs@{ nixpkgs, home-manager, nix-darwin, ... }:{
+  outputs = inputs@{ nixpkgs, home-manager, nix-darwin, ... }:
+    let
+      helpers = import ./lib { inherit inputs; };
+    in {
     darwinConfigurations = {
-      air =
-        inputs.nix-darwin.lib.darwinSystem {
-          system = "aarch64-darwin"; 
-          pkgs = import inputs.nixpkgs {
-            system = "aarch64-darwin"; 
-
-            config.allowUnfree = true;
-            overlays = [
-              inputs.nix-vscode-extensions.overlays.default
-              inputs.nur.overlays.default
-            ];
-          };
-          # Set all inputs parameters as special arguments for all submodules
-          specialArgs = { inherit inputs; };
-          modules = [
-            ./modules/darwin
-            home-manager.darwinModules.home-manager
-            {
-              home-manager = {
-                useGlobalPkgs = true;
-                backupFileExtension = "backup";
-                # include the home-manager module
-                users.marcalph = import ./modules/home;
-              };
-              users.users.marcalph.home = "/Users/marcalph";
-            }
-          ];
-        };
-      rizoapro =
-        # darwinSystem is a function inherited from the nix-darwin lib namespace
-        inputs.nix-darwin.lib.darwinSystem {
-          system = "aarch64-darwin"; # alternatively "x86_64-darwin"
-          pkgs = import inputs.nixpkgs {
-            system = "aarch64-darwin"; 
-            config.allowUnfree = true;
-            overlays = [
-              inputs.nix-vscode-extensions.overlays.default
-              inputs.nur.overlays.default
-            ];
-          };
-        modules = [
-          # include the nix-darwin module
-          ./modules/darwin
-          # setup home-manager
-          home-manager.darwinModules.home-manager
-          {
-            home-manager = {
-              useGlobalPkgs = true;
-              backupFileExtension = "backup";
-              # include the home-manager module
-              users.marcalph = import ./modules/home;
-            };
-            users.users.marcalph.home = "/Users/marcalph";
-          }
-        ];
-      };
+      air = helpers.mkDarwin "air";
+      rizoapro = helpers.mkDarwin "rizoapro";
     };
     # Add devShell for development
     # Correct devShell using pkgs.mkShell
