@@ -9,4 +9,6 @@
     "/Applications/Nix Apps/Rectangle.app"
     "/Applications/Nix Apps/Slack.app"
   ];
+  system.defaults.dock.orientation = "left";
+  security.pam.services.sudo_local.touchIdAuth = false;
 }

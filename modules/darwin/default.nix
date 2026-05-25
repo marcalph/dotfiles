@@ -1,5 +1,10 @@
-{pkgs, config, lib, inputs,... }: {
+{pkgs, config, lib, inputs, hostname, ... }: {
   nixpkgs.config.allowUnfree = true;
+
+  networking.hostName      = lib.mkDefault hostname;
+  networking.localHostName = lib.mkDefault hostname;
+  networking.computerName  = lib.mkDefault hostname;
+  system.defaults.smb.NetBIOSName = lib.mkDefault (lib.toUpper hostname);
   
   environment.systemPackages = [
     pkgs.home-manager
@@ -26,11 +31,11 @@
 
   system.defaults = {
     dock = {
-      autohide = true;
-      orientation = "bottom";
-      show-process-indicators = false;
-      show-recents = false;
-      static-only = true;
+      autohide = lib.mkDefault true;
+      orientation = lib.mkDefault "bottom";
+      show-process-indicators = lib.mkDefault true;
+      show-recents = lib.mkDefault true;
+      static-only = lib.mkDefault true;
       persistent-apps = lib.mkDefault [
         "/Applications/Nix Apps/Firefox.app"
         "/Applications/Nix Apps/Visual Studio Code.app"
@@ -42,19 +47,19 @@
       ];
     };
     NSGlobalDomain = {
-      AppleShowAllExtensions = true;
-      AppleShowAllFiles = true;
-      InitialKeyRepeat = 14;
-      KeyRepeat = 1;
+      AppleShowAllExtensions = lib.mkDefault true;
+      AppleShowAllFiles = lib.mkDefault true;
+      InitialKeyRepeat = lib.mkDefault 14;
+      KeyRepeat = lib.mkDefault 1;
     };
     finder = {
-      AppleShowAllExtensions = true;
-      ShowPathbar = true;
-      _FXShowPosixPathInTitle = true;
+      AppleShowAllExtensions = lib.mkDefault true;
+      ShowPathbar = lib.mkDefault true;
+      _FXShowPosixPathInTitle = lib.mkDefault true;
     };
   };
-  security.pam.services.sudo_local.touchIdAuth = true;
-  system.keyboard.enableKeyMapping = true;
-  system.keyboard.remapCapsLockToEscape = true;
+  security.pam.services.sudo_local.touchIdAuth = lib.mkDefault true;
+  system.keyboard.enableKeyMapping = lib.mkDefault true;
+  system.keyboard.remapCapsLockToEscape = lib.mkDefault true;
 
 }
