@@ -8,6 +8,7 @@
   
   environment.systemPackages = [
     pkgs.home-manager
+    pkgs.nixos-rebuild # for remote builds
     pkgs.rectangle
     pkgs.firefox  # System-level for Spotlight registration
     pkgs.obsidian
