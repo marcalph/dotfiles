@@ -67,7 +67,7 @@
     # Enable file path completion for uv commands
     zstyle ':completion:*:*:uv:*' file-patterns '*'
 
-    # tty1-only sway autostart (nixtower); Macs and SSH sessions are unaffected.
+    # tty1-only sway autostart (tower); Macs and SSH sessions are unaffected.
     if [ "$(tty)" = "/dev/tty1" ] && [ -z "$WAYLAND_DISPLAY" ] && command -v sway >/dev/null; then
       exec sway
     fi
