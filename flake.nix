@@ -28,6 +28,9 @@
       air = helpers.mkDarwin "air";
       pro = helpers.mkDarwin "pro";
     };
+    nixosConfigurations = {
+      nixtower = helpers.mkNixos { hostname = "nixtower"; };
+    };
     # Add devShell for development
     # Correct devShell using pkgs.mkShell
     devShells = {

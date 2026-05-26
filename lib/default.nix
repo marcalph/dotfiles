@@ -28,4 +28,28 @@ in {
         }
       ];
     };
+
+  mkNixos = { hostname, system ? "x86_64-linux" }:
+    nixpkgs.lib.nixosSystem {
+      inherit system;
+      specialArgs = { inherit inputs hostname; };
+      modules = [
+        {
+          nixpkgs.overlays = [
+            inputs.nix-vscode-extensions.overlays.default
+            inputs.nur.overlays.default
+          ];
+        }
+        ../modules/nixos
+        ../modules/hosts/${hostname}
+        home-manager.nixosModules.home-manager
+        {
+          home-manager = {
+            useGlobalPkgs = true;
+            backupFileExtension = "backup";
+            users.marcalph = import ../modules/home;
+          };
+        }
+      ];
+    };
 }

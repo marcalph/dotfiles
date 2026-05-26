@@ -1,4 +1,4 @@
-{ ... }:
+{ pkgs, lib, ... }:
 
 {
   programs.kitty = {
@@ -27,8 +27,7 @@
 
       # Bell
       enable_audio_bell = false;
-
-      # macOS specific
+    } // lib.optionalAttrs pkgs.stdenv.isDarwin {
       macos_option_as_alt = true;
       macos_quit_when_last_window_closed = true;
     };
