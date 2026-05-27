@@ -54,7 +54,6 @@
     compinit
 
     compdef eza=ls
-    compdef eza=ll
 
     export PYTHON_CONFIGURE_OPTS="--with-lzma --enable-shared"
     # Tcl/Tk paths for Python tkinter support
@@ -62,7 +61,7 @@
     export TK_LIBRARY="${pkgs.tk}/lib/tk8.6"
 
     # Initialize pay-respects for command correction
-    eval "$(pay-respects zsh)"
+    eval "$(${pkgs.pay-respects}/bin/pay-respects zsh)"
 
     # Enable file path completion for uv commands
     zstyle ':completion:*:*:uv:*' file-patterns '*'
