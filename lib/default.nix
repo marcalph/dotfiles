@@ -21,6 +21,7 @@ in {
         {
           home-manager = {
             useGlobalPkgs = true;
+            useUserPackages = true;
             backupFileExtension = "backup";
             users.marcalph = import ../modules/home;
           };
@@ -46,6 +47,7 @@ in {
         {
           home-manager = {
             useGlobalPkgs = true;
+            useUserPackages = true;
             backupFileExtension = "backup";
             users.marcalph = import ../modules/home;
           };
