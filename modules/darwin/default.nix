@@ -18,7 +18,8 @@
     pkgs.vscode
     pkgs.kitty
     pkgs.anki-bin
-    pkgs.qmk  # CLI only; run `qmk setup` once to clone the qmk_firmware tree
+    pkgs.qmk
+    pkgs.dos2unix  # required by qmk doctor
     inputs.helix.packages."${pkgs.stdenv.hostPlatform.system}".helix
   ];
   
