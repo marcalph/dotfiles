@@ -18,6 +18,7 @@
     pkgs.vscode
     pkgs.kitty
     pkgs.anki-bin
+    pkgs.qmk  # CLI only; run `qmk setup` once to clone the qmk_firmware tree
     inputs.helix.packages."${pkgs.stdenv.hostPlatform.system}".helix
   ];
   
