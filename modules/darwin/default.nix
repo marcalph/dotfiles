@@ -23,7 +23,26 @@
     inputs.helix.packages."${pkgs.stdenv.hostPlatform.system}".helix
   ];
   
+  # nix-homebrew installs and owns the Homebrew prefix declaratively,
+  # so no manual `curl | bash` install is needed.
+  nix-homebrew = {
+    enable = true;
+    user = "marcalph";
+    autoMigrate = true;  # adopt an existing brew install if one is already present
+  };
+
+  # nix-darwin's homebrew module declares what to install via the brew
+  # that nix-homebrew provides.
+  homebrew = {
+    enable = true;
+    casks = [ "qmk-toolbox" ];  # not in nixpkgs; only available as a brew cask
+  };
+
   programs.zsh.enable = true;
+
+  # Skip the options manual (optionsJSON); avoids the unreliable
+  # builtins.toFile store-reference warning during builds.
+  documentation.enable = false;
   system.stateVersion = 4;
   
   # Disabled because using Determinate Systems Nix installer

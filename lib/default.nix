@@ -17,6 +17,7 @@ in {
       modules = [
         ../modules/darwin
         ../modules/hosts/${hostname}.nix
+        inputs.nix-homebrew.darwinModules.nix-homebrew
         home-manager.darwinModules.home-manager
         {
           home-manager = {
