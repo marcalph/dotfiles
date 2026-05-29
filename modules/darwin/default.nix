@@ -8,7 +8,7 @@
   
   environment.systemPackages = [
     pkgs.home-manager
-    pkgs.nixos-rebuild # for remote builds
+    pkgs.nixos-rebuild # for remote hosts builds
     pkgs.rectangle
     pkgs.firefox  # System-level for Spotlight registration
     pkgs.obsidian
@@ -23,19 +23,21 @@
     inputs.helix.packages."${pkgs.stdenv.hostPlatform.system}".helix
   ];
   
-  # nix-homebrew installs and owns the Homebrew prefix declaratively,
-  # so no manual `curl | bash` install is needed.
   nix-homebrew = {
     enable = true;
     user = "marcalph";
-    autoMigrate = true;  # adopt an existing brew install if one is already present
+    autoMigrate = true;
   };
 
-  # nix-darwin's homebrew module declares what to install via the brew
-  # that nix-homebrew provides.
   homebrew = {
     enable = true;
-    casks = [ "qmk-toolbox" ];  # not in nixpkgs; only available as a brew cask
+    # (not notarized), so install without quarantine
+    casks = [
+      {
+        name = "qmk-toolbox";
+        args = { no_quarantine = true; };
+      }
+    ];
   };
 
   programs.zsh.enable = true;
