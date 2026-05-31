@@ -41,8 +41,6 @@
     ];
   };
 
-  # Homebrew removed --no-quarantine, so strip the quarantine attribute from
-  # these ad-hoc-signed casks after activation; otherwise Gatekeeper blocks them.
   system.activationScripts.postActivation.text = ''
     for app in "QMK Toolbox" "Vial"; do
       if [ -d "/Applications/$app.app" ]; then
@@ -53,12 +51,11 @@
 
   programs.zsh.enable = true;
 
-  # Skip the options manual (optionsJSON); avoids the unreliable
-  # builtins.toFile store-reference warning during builds.
+  # fix builtins.toFile store-reference warning during builds.
   documentation.enable = false;
   system.stateVersion = 4;
   
-  # Disabled because using Determinate Systems                           installer
+  # Disabled because using Determinate                        installer
   nix.enable = false;
   
   # Required for newer nix-darwin (system defaults need a primary user)
