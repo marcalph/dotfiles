@@ -19,6 +19,7 @@
     pkgs.kitty
     pkgs.anki-bin
     pkgs.qmk
+    pkgs.gcc-arm-embedded  # arm-none-eabi-gcc; required to build RP2040 (Sea-Picro) firmware
     pkgs.dos2unix  # required by qmk doctor
     inputs.helix.packages."${pkgs.stdenv.hostPlatform.system}".helix
   ];
@@ -31,14 +32,24 @@
 
   homebrew = {
     enable = true;
-    # (not notarized), so install without quarantine
+    # Both are ad-hoc signed (not notarized). Homebrew removed the
+    # --no-quarantine flag, so quarantine is stripped manually after install
+    # (see postActivation below) to satisfy Gatekeeper.
     casks = [
-      {
-        name = "qmk-toolbox";
-        args = { no_quarantine = true; };
-      }
+      "qmk-toolbox"
+      "vial"
     ];
   };
+
+  # Homebrew removed --no-quarantine, so strip the quarantine attribute from
+  # these ad-hoc-signed casks after activation; otherwise Gatekeeper blocks them.
+  system.activationScripts.postActivation.text = ''
+    for app in "QMK Toolbox" "Vial"; do
+      if [ -d "/Applications/$app.app" ]; then
+        /usr/bin/xattr -dr com.apple.quarantine "/Applications/$app.app" 2>/dev/null || true
+      fi
+    done
+  '';
 
   programs.zsh.enable = true;
 
@@ -47,7 +58,7 @@
   documentation.enable = false;
   system.stateVersion = 4;
   
-  # Disabled because using Determinate Systems Nix installer
+  # Disabled because using Determinate Systems                           installer
   nix.enable = false;
   
   # Required for newer nix-darwin (system defaults need a primary user)
