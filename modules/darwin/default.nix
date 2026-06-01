@@ -10,7 +10,8 @@
     pkgs.home-manager
     pkgs.nixos-rebuild # for remote hosts builds
     pkgs.rectangle
-    pkgs.firefox  # System-level for Spotlight registration
+    # System-level redeclaration of packages for Spotlight registration
+    pkgs.firefox
     pkgs.obsidian
     pkgs.slack
     pkgs.discord

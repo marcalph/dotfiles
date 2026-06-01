@@ -26,7 +26,8 @@ The `pro` host is a regular Ubuntu machine: Nix manages only the user env
 ```shell
 git clone git@github.com:marcalph/dotfiles.git ~/dotfiles
 nix run home-manager/master -- switch --flake ~/dotfiles#pro
-chsh -s "$(which zsh)"
+command -v zsh | sudo tee -a /etc/shells
+chsh -s "$(command -v zsh)"
 ```
 
 ## Daily Usage
