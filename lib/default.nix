@@ -31,6 +31,27 @@ in {
       ];
     };
 
+  # Standalone home-manager to handle only user env
+  mkHome = { hostname, system ? "x86_64-linux" }:
+    home-manager.lib.homeManagerConfiguration {
+      pkgs = import nixpkgs {
+        inherit system;
+        config.allowUnfree = true;
+        overlays = [
+          inputs.nix-vscode-extensions.overlays.default
+          inputs.nur.overlays.default
+        ];
+      };
+      extraSpecialArgs = { inherit inputs hostname; };
+      modules = [
+        ../modules/home
+        {
+          home.username = "marc.alphonsus";
+          home.homeDirectory = "/home/marc.alphonsus";
+        }
+      ];
+    };
+
   mkNixos = { hostname, system ? "x86_64-linux" }:
     nixpkgs.lib.nixosSystem {
       inherit system;

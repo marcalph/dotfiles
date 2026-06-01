@@ -27,10 +27,12 @@
     in {
     darwinConfigurations = {
       air = helpers.mkDarwin "air";
-      pro = helpers.mkDarwin "pro";
     };
     nixosConfigurations = {
       tower = helpers.mkNixos { hostname = "tower"; };
+    };
+    homeConfigurations = {
+      pro = helpers.mkHome { hostname = "WKS-00259"; };
     };
     # Add devShell for development
     # Correct devShell using pkgs.mkShell
