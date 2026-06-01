@@ -45,6 +45,7 @@ in {
       extraSpecialArgs = { inherit inputs hostname; };
       modules = [
         ../modules/home
+        ../modules/hosts/${hostname}.nix
         {
           home.username = "marc.alphonsus";
           home.homeDirectory = "/home/marc.alphonsus";

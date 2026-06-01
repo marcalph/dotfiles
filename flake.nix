@@ -32,7 +32,7 @@
       tower = helpers.mkNixos { hostname = "tower"; };
     };
     homeConfigurations = {
-      pro = helpers.mkHome { hostname = "WKS-00259"; };
+      pro = helpers.mkHome { hostname = "pro"; }; #hm doesnt own hostname, here it is just a build flag
     };
     # Add devShell for development
     # Correct devShell using pkgs.mkShell
