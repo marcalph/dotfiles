@@ -6,13 +6,20 @@
   targets.genericLinux.nixGL.defaultWrapper = "mesa";
   programs.kitty.package = config.lib.nixGL.wrap pkgs.kitty;
 
+  home.packages = [
+    pkgs.bitwarden-desktop
+    pkgs.obsidian
+    pkgs.anki-bin
+  ];
+
   # GNOME / Ubuntu Dock — pro only (this file is imported solely by mkHome "pro")
   dconf.settings = {
     "org/gnome/shell".favorite-apps = [
       "firefox.desktop"
+      "google-chrome.desktop"
       "code.desktop"
       "obsidian.desktop"
-      "bitwarden.desktop" # from pkgs.bitwarden-desktop in home.packages
+      "bitwarden.desktop"
       "kitty.desktop"
       "anki.desktop"
     ];
