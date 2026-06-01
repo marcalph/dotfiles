@@ -19,6 +19,10 @@
     # Nix User Repository (for firefox extensions)
     nur.url = "github:nix-community/NUR";
     helix.url = "github:helix-editor/helix/master";
+    nixgl = {
+      url = "github:nix-community/nixGL";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = inputs@{ nixpkgs, home-manager, nix-darwin, ... }:
