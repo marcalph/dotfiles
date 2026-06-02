@@ -31,7 +31,12 @@
 
     "org/gnome/shell/extensions/dash-to-dock" = {
       dock-position = "BOTTOM";
+      # Ubuntu's dock ships "panel mode" (always-on) → dock-fixed defaults true,
+      # which overrides autohide. Must unset it for autohide to take effect.
+      dock-fixed = false;
       autohide = true;
+      # hide unconditionally + reveal on hover (not just dodge-overlapping-windows)
+      intellihide = false;
     };
   };
 }

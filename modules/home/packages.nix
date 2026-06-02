@@ -14,12 +14,14 @@
     shellcheck
     pay-respects
     jq
+    dotenv-cli
     poetry
     pandoc
     pre-commit
     tldr
     ranger
     diesel-cli
+    gnumake
     pkg-config
     turbo
     readline
