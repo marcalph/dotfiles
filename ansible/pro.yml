@@ -20,6 +20,25 @@
          else ansible_architecture) }}
 
   tasks:
+    # --- Passwordless sudo for the automation user ----------
+    # This playbook targets localhost and needs `become`. The fprintd PAM
+    # module (enabled by the fprintd block below) sits first in common-auth and
+    # blocks sudo for ~10s waiting on a finger swipe, which races out Ansible's
+    # become-prompt timeout ("Timed out waiting for become success"). A NOPASSWD
+    # rule makes become use `sudo -n`, short-circuiting PAM entirely so neither
+    # password nor fingerprint is involved. validate= runs visudo so a malformed
+    # rule can never lock out sudo. NB: the *first* run still authenticates
+    # (via --ask-become-pass / swipe); subsequent runs are non-interactive.
+    - name: Passwordless sudo for {{ target_user }}
+      tags: [sudo]
+      ansible.builtin.copy:
+        dest: /etc/sudoers.d/10-pro-ansible-nopasswd
+        content: "{{ target_user }} ALL=(ALL:ALL) NOPASSWD:ALL\n"
+        owner: root
+        group: root
+        mode: "0440"
+        validate: visudo -cf %s
+
     # --- Docker engine -------------------------------------
     - name: Docker engine
       tags: [docker]
