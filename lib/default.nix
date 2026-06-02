@@ -8,6 +8,9 @@ in {
       pkgs = import nixpkgs {
         system = "aarch64-darwin";
         config.allowUnfree = true;
+        # bitwarden-desktop pins electron 39 (same as upstream Bitwarden); nixpkgs
+        # flags it once that electron major hits EOL. Clears when bitwarden bumps.
+        config.permittedInsecurePackages = [ "electron-39.8.10" ];
         overlays = [
           inputs.nix-vscode-extensions.overlays.default
           inputs.nur.overlays.default
@@ -37,6 +40,7 @@ in {
       pkgs = import nixpkgs {
         inherit system;
         config.allowUnfree = true;
+        config.permittedInsecurePackages = [ "electron-39.8.10" ];
         overlays = [
           inputs.nix-vscode-extensions.overlays.default
           inputs.nur.overlays.default

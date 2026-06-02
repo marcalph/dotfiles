@@ -29,7 +29,7 @@
     xz
     zulu
     nodejs
-    nodePackages.pnpm
+    pnpm
     rustup
     graphviz
     # Tcl/Tk for Python tkinter support (not bundled with uv's standalone Python)
