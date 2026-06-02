@@ -14,6 +14,7 @@
     shellcheck
     pay-respects
     jq
+    poetry
     pandoc
     pre-commit
     tldr
