@@ -13,17 +13,15 @@
         ms-vscode.cpptools
         ms-python.vscode-pylance
         ms-toolsai.jupyter
-        ms-vsliveshare.vsliveshare
         tamasfe.even-better-toml
         eamodio.gitlens
         rust-lang.rust-analyzer
-        ms-vscode-remote.remote-ssh
       ]
-      # Additional marketplace extensions can be added here:
-      # ++ (with pkgs.vscode-marketplace; [
-      #   google.colab  # installed manually from marketplace
-      # ]);
-      ;
+      ++ (with pkgs.vscode-marketplace; [
+        anthropic.claude-code
+        pomdtr.excalidraw-editor
+        google.colab
+      ]);
       userSettings = {
         "update.mode" = "none";
         "terminal.integrated.fontFamily" = "Hack Nerd Font Mono";
