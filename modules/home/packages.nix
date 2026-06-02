@@ -22,6 +22,7 @@
     ranger
     diesel-cli
     gnumake
+    cmake
     pkg-config
     turbo
     readline
