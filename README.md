@@ -21,13 +21,20 @@ nix run nix-darwin --extra-experimental-features nix-command --extra-experimenta
 
 ### Ubuntu host (`pro`) — standalone home-manager
 
-The `pro` host is a regular Ubuntu machine: Nix manages only the user env
+The `pro` host is a two-tool setup: **nix/home-manager** owns the user env +
+client CLIs, **Ansible** owns the system layer (daemons, apt-only apps, PAM —
+see `ansible/pro.yml`). home-manager brings `ansible` itself, so bootstrap in
+that order.
 
 ```shell
 git clone git@github.com:marcalph/dotfiles.git ~/dotfiles
 nix run home-manager/master -- switch --flake ~/dotfiles#pro
 command -v zsh | sudo tee -a /etc/shells
 chsh -s "$(command -v zsh)"
+
+# system layer (docker engine, …) — run from the ansible/ dir
+cd ~/dotfiles/ansible && ansible-playbook pro.yml --ask-become-pass
+# re-login afterwards so the docker group applies
 ```
 
 ## Daily Usage

@@ -10,6 +10,11 @@
     pkgs.bitwarden-desktop
     pkgs.obsidian
     pkgs.anki-bin
+    # Ansible owns pro's system layer (daemons/OS config) — run against localhost.
+    # See ansible/pro.yml. ansible itself is a client tool → nix; the daemons it
+    # installs (docker, …) are apt/system-level.
+    pkgs.ansible
+    pkgs.ansible-lint
   ];
 
   # GNOME / Ubuntu Dock — pro only (this file is imported solely by mkHome "pro")

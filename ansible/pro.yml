@@ -1,0 +1,98 @@
+---
+# pro (Ubuntu / WKS-00259) system layer — the half nix/home-manager can't own:
+# system daemons, apt-only apps, PAM, sysctl. Run locally:
+#
+#   ansible-playbook pro.yml --ask-become-pass
+#
+# Tasks are tagged so you can run one slice, e.g. `--tags docker`.
+
+- name: Pro system layer
+  hosts: pro
+  become: true
+
+  vars:
+    # local connection → controller == target, so the invoking login user is
+    # whoever ran ansible-playbook (before become).
+    target_user: "{{ lookup('env', 'USER') }}"
+    docker_arch: >-
+      {{ 'amd64' if ansible_architecture == 'x86_64'
+         else ('arm64' if ansible_architecture == 'aarch64'
+         else ansible_architecture) }}
+
+  tasks:
+    # --- Docker engine -------------------------------------
+    - name: Docker engine
+      tags: [docker]
+      block:
+        - name: Install Docker apt-repo prerequisites
+          ansible.builtin.apt:
+            name:
+              - ca-certificates
+              - curl
+            state: present
+            update_cache: true
+
+        - name: Add Docker's official apt repository
+          ansible.builtin.deb822_repository:
+            name: docker
+            types: [deb]
+            uris: https://download.docker.com/linux/ubuntu
+            signed_by: https://download.docker.com/linux/ubuntu/gpg
+            suites: ["{{ ansible_distribution_release }}"]
+            components: [stable]
+            architectures: ["{{ docker_arch }}"]
+            enabled: true
+            state: present
+
+        - name: Install Docker Engine, CLI, containerd and plugins
+          ansible.builtin.apt:
+            name:
+              - docker-ce
+              - docker-ce-cli
+              - containerd.io
+              - docker-buildx-plugin
+              - docker-compose-plugin
+            state: present
+            update_cache: true
+
+        - name: Enable and start the docker service
+          ansible.builtin.systemd_service:
+            name: docker
+            enabled: true
+            state: started
+
+        - name: Add the login user to the docker group - {{ target_user }}
+          ansible.builtin.user:
+            name: "{{ target_user }}"
+            groups: docker
+            append: true
+          # NB: re-login (or `newgrp docker`) for the group to take effect.
+
+    # --- Fingerprint / fprintd (Goodix, goodixmoc — open libfprint, no TOD) ---
+    # Installs the daemon + PAM module and enables the PAM profile. Enrollment
+    # is interactive (per-user finger swipes) so it stays a manual post-step:
+    #   fprintd-enroll && fprintd-verify
+    # Lockout safety: after this runs, test sudo in a NEW terminal while keeping
+    # a root shell open (sudo -k; sudo true). If enroll says "no devices
+    # available", check the 27c6:xxxx Goodix USB id vs libfprint's device list.
+    - name: Fingerprint authentication
+      tags: [fprintd]
+      block:
+        - name: Install fprintd and the PAM module
+          ansible.builtin.apt:
+            name:
+              - fprintd
+              - libpam-fprintd
+            state: present
+            update_cache: true
+
+        - name: Check whether the fprintd PAM profile is already enabled
+          ansible.builtin.command: grep -q pam_fprintd /etc/pam.d/common-auth
+          register: fprintd_pam
+          changed_when: false
+          failed_when: false
+
+        - name: Enable the fprintd PAM profile
+          ansible.builtin.command: pam-auth-update --enable fprintd
+          when: fprintd_pam.rc != 0
+          changed_when: true

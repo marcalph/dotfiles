@@ -1,0 +1,4 @@
+# pro is configured against itself — nix/home-manager owns the user env,
+# Ansible owns the system layer (see TODO §14). Push-based against localhost.
+[pro]
+localhost ansible_connection=local
