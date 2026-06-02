@@ -96,3 +96,21 @@
           ansible.builtin.command: pam-auth-update --enable fprintd
           when: fprintd_pam.rc != 0
           changed_when: true
+
+    # --- Electron sandbox (vscode, bitwarden, obsidian, anki …) -------------
+    # Ubuntu sets kernel.apparmor_restrict_unprivileged_userns=1, which blocks
+    # Electron's user-namespace sandbox. Electron then falls back to the SUID
+    # sandbox helper (chrome-sandbox), but ours lives in the immutable Nix store
+    # as r-xr-xr-x root — it can't be setuid 4755 — so Electron aborts at launch
+    # ("The SUID sandbox helper binary was found, but is not configured
+    # correctly"). Re-enabling unprivileged userns restores the proper sandbox
+    # for every Nix Electron app rather than running any of them --no-sandbox.
+    - name: Electron user-namespace sandbox
+      tags: [electron]
+      ansible.posix.sysctl:
+        name: kernel.apparmor_restrict_unprivileged_userns
+        value: "0"
+        sysctl_file: /etc/sysctl.d/60-apparmor-userns.conf
+        sysctl_set: true
+        reload: true
+        state: present
