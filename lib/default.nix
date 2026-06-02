@@ -1,6 +1,20 @@
 { inputs }:
 let
   inherit (inputs) nixpkgs home-manager;
+  overlays = [
+    inputs.nix-vscode-extensions.overlays.default
+    inputs.nur.overlays.default
+    # nixpkgs 4df1b88 ships highlight's shellscript-crash-fix.patch already applied
+    # upstream, so it fails to apply ("reversed or previously applied"). Drop the
+    # now-redundant patch (the fix is in the source). Remove once nixpkgs fixes it.
+    (final: prev: {
+      highlight = prev.highlight.overrideAttrs (old: {
+        patches = builtins.filter
+          (p: !(prev.lib.hasInfix "shellscript-crash-fix" (baseNameOf (toString p))))
+          (old.patches or [ ]);
+      });
+    })
+  ];
 in {
   mkDarwin = hostname:
     inputs.nix-darwin.lib.darwinSystem {
@@ -11,10 +25,7 @@ in {
         # bitwarden-desktop pins electron 39 (same as upstream Bitwarden); nixpkgs
         # flags it once that electron major hits EOL. Clears when bitwarden bumps.
         config.permittedInsecurePackages = [ "electron-39.8.10" ];
-        overlays = [
-          inputs.nix-vscode-extensions.overlays.default
-          inputs.nur.overlays.default
-        ];
+        inherit overlays;
       };
       specialArgs = { inherit inputs hostname; };
       modules = [
@@ -41,10 +52,7 @@ in {
         inherit system;
         config.allowUnfree = true;
         config.permittedInsecurePackages = [ "electron-39.8.10" ];
-        overlays = [
-          inputs.nix-vscode-extensions.overlays.default
-          inputs.nur.overlays.default
-        ];
+        inherit overlays;
       };
       extraSpecialArgs = { inherit inputs hostname; };
       modules = [
@@ -63,10 +71,7 @@ in {
       specialArgs = { inherit inputs hostname; };
       modules = [
         {
-          nixpkgs.overlays = [
-            inputs.nix-vscode-extensions.overlays.default
-            inputs.nur.overlays.default
-          ];
+          nixpkgs.overlays = overlays;
         }
         ../modules/nixos
         ../modules/hosts/${hostname}
