@@ -18,6 +18,7 @@
     poetry
     pandoc
     pre-commit
+    commitizen # conventional-commit prompt / changelog / version bump (`git cz`)
     worktrunk # git worktree manager for parallel AI-agent workflows
     tldr
     ranger

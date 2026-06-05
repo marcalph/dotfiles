@@ -28,7 +28,7 @@
     ls = "eza --grid --icons";
     tree = "eza --tree --icons";
     ga = "git add .";
-    gc = "git commit";
+    gc = "cz commit"; # commitizen interactive conventional-commit prompt
     gl = "git log --oneline --decorate --graph";
     gs = "git status | head -n 2; exa --git -l";
     mv = "mv -iv";
