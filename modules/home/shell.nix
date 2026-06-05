@@ -47,7 +47,12 @@
 
     for index ({1..9}) alias "$index"="cd +$index"; unset index
 
-    export PATH=~/.cargo/bin:~/.local/bin:/usr/local/bin:$PATH
+    # Determinate Nix's per-user nix.sh adds only ~/.nix-profile/bin to PATH and
+    # sets the shared __ETC_PROFILE_NIX_SOURCED guard. At GNOME login it wins, so
+    # the session PATH never gets the *daemon* profile's bin (where `nix` itself
+    # lives) and nix-daemon.sh is then short-circuited in every subshell. Re-add
+    # it explicitly so `nix`/`home-manager` always resolve (typeset -U dedupes).
+    export PATH=/nix/var/nix/profiles/default/bin:~/.cargo/bin:~/.local/bin:/usr/local/bin:$PATH
     export XDG_CONFIG_HOME="$HOME/.config"
 
     autoload -Uz compinit

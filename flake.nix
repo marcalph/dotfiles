@@ -23,6 +23,11 @@
       url = "github:nix-community/nixGL";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    # macOS-style key remapping on pro (GNOME/Wayland); see modules/hosts/pro.nix
+    xremap-flake = {
+      url = "github:xremap/nix-flake";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = inputs@{ nixpkgs, home-manager, nix-darwin, ... }:

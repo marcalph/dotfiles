@@ -115,3 +115,50 @@
           ansible.builtin.command: pam-auth-update --enable fprintd
           when: fprintd_pam.rc != 0
           changed_when: true
+
+    # --- xremap device access (macOS-style key remapping) -------------------
+    # The xremap user service + keymap live in nix (modules/hosts/pro.nix), but
+    # device access can't be granted from home-manager on a non-NixOS box.
+    # xremap reads /dev/input/event* (input group) and writes /dev/uinput, which
+    # ships root:root 0660. This block: puts the user in `input`, loads the
+    # uinput module at boot, and makes its node group-owned by `input` so the
+    # user service can open it without root. After the first run, log out/in so
+    # the new group + the GNOME shell extension take effect.
+    - name: xremap device access
+      tags: [xremap]
+      block:
+        - name: Add {{ target_user }} to the input group
+          ansible.builtin.user:
+            name: "{{ target_user }}"
+            groups: input
+            append: true
+
+        - name: Load the uinput module at boot
+          ansible.builtin.copy:
+            dest: /etc/modules-load.d/uinput.conf
+            content: "uinput\n"
+            owner: root
+            group: root
+            mode: "0644"
+
+        - name: Load the uinput module now
+          ansible.builtin.command: modprobe uinput
+          changed_when: false
+
+        # Same filename a manual setup already used on pro, so this codifies
+        # that rule declaratively instead of leaving a second, duplicate file.
+        # uaccess → logind grants the active-session user an ACL on the node.
+        - name: udev rule — uinput node owned by the input group
+          ansible.builtin.copy:
+            dest: /etc/udev/rules.d/99-xremap-uinput.rules
+            content: |
+              KERNEL=="uinput", GROUP="input", MODE="0660", TAG+="uaccess", OPTIONS+="static_node=uinput"
+            owner: root
+            group: root
+            mode: "0644"
+          register: uinput_rule
+
+        - name: Reload udev rules and re-trigger uinput
+          ansible.builtin.shell: udevadm control --reload-rules && udevadm trigger
+          when: uinput_rule.changed
+          changed_when: true
