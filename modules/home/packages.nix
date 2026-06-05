@@ -18,6 +18,7 @@
     poetry
     pandoc
     pre-commit
+    worktrunk # git worktree manager for parallel AI-agent workflows
     tldr
     ranger
     diesel-cli
