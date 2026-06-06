@@ -1,5 +1,10 @@
-{ config, pkgs, inputs, ... }: {
+{ config, pkgs, inputs, lib, ... }: {
   imports = [ inputs.xremap-flake.homeManagerModules.default ];
+
+  # pro is the work machine → override the shared personal git identity
+  # (modules/home/git.nix) with the harmattan one, for this host only.
+  programs.git.settings.user.name = lib.mkForce "marc-alphonsus";
+  programs.git.settings.user.email = lib.mkForce "marc.alphonsus@harmattan.ai";
 
   # make kitty etc. show up in the ubuntu app grid
   targets.genericLinux.enable = true;
