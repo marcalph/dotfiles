@@ -159,6 +159,14 @@
       toggle-quick-settings = [ ]; # was [<Super>s]; free Super+S (save)
     };
 
+    # Per-host wallpaper (placeholder: wallpapers/pro-wallpaper.png). The path
+    # literal copies the image into the nix store; swap the file to change it.
+    "org/gnome/desktop/background" = {
+      picture-uri = "file://${../../wallpapers/pro-wallpaper.png}";
+      picture-uri-dark = "file://${../../wallpapers/pro-wallpaper.png}";
+      picture-options = "zoom";
+    };
+
     "org/gnome/shell/extensions/dash-to-dock" = {
       dock-position = "LEFT";
       # Ubuntu's dock ships "panel mode" (always-on) → dock-fixed defaults true,
