@@ -7,7 +7,9 @@
     google-cloud-sql-proxy
     google-cloud-sdk
     ookla-speedtest
-    (python313.withPackages (ps: [ ps.tkinter ]))
+    # Python interpreters are managed by uv, not nix: `uv python install 3.12 …`
+    # symlinks pythonX.Y into ~/.local/bin (on PATH), so uv and poetry projects
+    # pick the version per project (`uv python pin` / `poetry env use 3.12`).
     uv
     ngrok
     pkgs.nerd-fonts.hack
