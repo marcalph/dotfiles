@@ -21,6 +21,8 @@
         anthropic.claude-code
         pomdtr.excalidraw-editor
         google.colab
+        # per-window color from a hash of the folder path → tells projects apart
+        stuart.unique-window-colors
       ]);
       # macOS-style Super (⌘) bindings. xremap leaves the Super key untouched in
       # VSCode (see modules/hosts/pro.nix) precisely so these focus-aware rules
