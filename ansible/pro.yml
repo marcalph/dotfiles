@@ -162,3 +162,55 @@
           ansible.builtin.shell: udevadm control --reload-rules && udevadm trigger
           when: uinput_rule.changed
           changed_when: true
+
+    # --- Unprivileged user namespaces (nix Electron/Chromium sandbox) -------
+    # Ubuntu's AppArmor blocks unprivileged userns → nix-built Chromium/Electron
+    # can't use the namespace sandbox and can't use the SUID sandbox either
+    # (read-only /nix/store can't hold a setuid-root helper), so they abort.
+    # Re-enabling userns restores the namespace sandbox (keeps sandboxing on,
+    # unlike --no-sandbox) and fixes ALL nix Chromium/Electron apps at once
+    # (Obsidian, Bitwarden, Chrome). Codifies the manual /etc/sysctl.d drop-in.
+    - name: Unprivileged user namespaces
+      tags: [userns]
+      block:
+        - name: Allow unprivileged user namespaces (sysctl drop-in)
+          ansible.builtin.copy:
+            dest: /etc/sysctl.d/60-apparmor-userns.conf
+            content: "kernel.apparmor_restrict_unprivileged_userns=0\n"
+            owner: root
+            group: root
+            mode: "0644"
+          register: userns_conf
+
+        - name: Apply sysctl
+          ansible.builtin.command: sysctl --system
+          when: userns_conf.changed
+          changed_when: true
+
+    # --- Google Chrome ------------------------------------------------------
+    # apt-only app (no nix module owns it); the dock pin google-chrome.desktop
+    # is already wired in nix/dconf — this installs the actual browser. Mirrors
+    # the docker block: deb822 repo (key auto-fetched via signed_by) + install.
+    # NB: like the docker/fprintd tasks, `update_cache` runs `apt update`, which
+    # currently fails on the broken GAR source on this host — clean that up for
+    # the apt-based tasks to complete on a fresh run.
+    - name: Google Chrome
+      tags: [chrome]
+      block:
+        - name: Add Google Chrome's apt repository
+          ansible.builtin.deb822_repository:
+            name: google-chrome
+            types: [deb]
+            uris: https://dl.google.com/linux/chrome/deb
+            signed_by: https://dl.google.com/linux/linux_signing_key.pub
+            suites: [stable]
+            components: [main]
+            architectures: [amd64]
+            enabled: true
+            state: present
+
+        - name: Install Google Chrome
+          ansible.builtin.apt:
+            name: google-chrome-stable
+            state: present
+            update_cache: true
