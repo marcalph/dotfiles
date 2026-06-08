@@ -163,6 +163,32 @@
           when: uinput_rule.changed
           changed_when: true
 
+    # --- Sway (Wayland compositor) ------------------------------------------
+    # The compositor + its GL/seat-level Wayland companions are system-level
+    # (DRM/logind/seatd), so apt — same boundary as docker/chrome. The *config*
+    # (~/.config/sway/config) is owned by home-manager (modules/hosts/pro.nix,
+    # wayland.windowManager.sway with package = null). Installing `sway` also
+    # drops /usr/share/wayland-sessions/sway.desktop, so "Sway" becomes
+    # selectable at the GDM login screen. swaynag ships with the sway package.
+    # NB: update_cache is intentionally OFF. These all live in Ubuntu's stock
+    # `universe` repo (already indexed in the local cache), and a full `apt
+    # update` currently dies on the broken harmattan GAR source
+    # (europe-west9-apt.pkg.dev/.../hai-apt-ubuntu-24-04 → 404 Release file),
+    # which is fatal for every task that refreshes the cache. Installing from
+    # the existing cache sidesteps it. Fix that source to re-enable refreshes.
+    - name: Sway compositor and Wayland tools
+      tags: [sway]
+      ansible.builtin.apt:
+        name:
+          - sway
+          - swaybg       # wallpaper (output * bg … fill)
+          - wofi         # app launcher (Super+d)
+          - wl-clipboard # wl-copy / wl-paste for CLI clipboard
+          - grim         # screenshots
+          - slurp        # region select for grim
+        state: present
+        update_cache: false
+
     # --- Unprivileged user namespaces (nix Electron/Chromium sandbox) -------
     # Ubuntu's AppArmor blocks unprivileged userns → nix-built Chromium/Electron
     # can't use the namespace sandbox and can't use the SUID sandbox either

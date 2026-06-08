@@ -40,18 +40,22 @@
   ];
 
   # ── macOS-style keyboard (Super == ⌘) ──────────────────────────────────────
-  # GNOME/Wayland can't remap copy/paste (Ctrl+C/V live inside each app's
-  # toolkit, not the compositor), so we remap at the evdev layer with xremap.
-  # It grabs the keyboard and re-emits via /dev/uinput — device access for that
-  # is granted by ansible/pro.yml (input group + uinput udev rule + module).
+  # Two layers, deliberately split (same model as macOS):
+  #   • app-internal keys (copy/paste/cut, in-file nav) → xremap, below.
+  #   • window/desktop management → Sway natively (Ctrl+Alt+arrows, mirroring
+  #     Rectangle's defaults on the Mac so muscle memory is identical). Those
+  #     chords aren't in the keymap, so xremap passes them through to Sway.
+  #
+  # No compositor (Sway or GNOME) can remap copy/paste or in-file nav — those
+  # live inside each app's toolkit, not the WM — so we remap at the evdev layer
+  # with xremap. It grabs the keyboard and re-emits via /dev/uinput; device
+  # access is granted by ansible/pro.yml (input group + uinput udev rule + module).
   #
   # Ctrl is never touched, so Ctrl+C stays SIGINT in the terminal. A lone Super
-  # tap still opens the GNOME overview (only Super+<key> chords are grabbed).
-  # NB: this overrides GNOME's Super+arrow window tiling (xremap eats the chord
-  # before the compositor sees it).
+  # tap still reaches the compositor (only Super+<key> chords are grabbed).
   services.xremap = {
     enable = true;
-    withGnome = true; # talks to the GNOME shell extension for window-class match
+    withWlroots = true; # Sway window-class detection (upstream-recommended over withSway)
     config.keymap = [
       # Terminals: ⌘C/V/X → Ctrl+Shift+C/V/X so they copy/paste instead of
       # sending SIGINT/SIGQUIT. (Detecting the terminal needs the extension.)
@@ -125,14 +129,90 @@
     ];
   };
 
-  # xremap's window-class detection on GNOME/Wayland requires its shell
-  # extension. Ubuntu's GDM-launched gnome-shell only scans ~/.local/share, not
-  # the nix profile, so symlink the nix-built extension into place; it's enabled
-  # via dconf (enabled-extensions) below.
-  home.file.".local/share/gnome-shell/extensions/xremap@k0kubun.com".source =
-    "${pkgs.gnomeExtensions.xremap}/share/gnome-shell/extensions/xremap@k0kubun.com";
+  # ── Sway (Wayland compositor) ───────────────────────────────────────────────
+  # The compositor binary + its GL/seat-level companions (swaybg, wofi, …) are
+  # apt-installed by ansible/pro.yml — same boundary as docker/chrome: anything
+  # touching DRM/GL/logind is system-level, not nix. So here `package = null`:
+  # home-manager owns ~/.config/sway/config only and the system Sway runs it.
+  # Pick "Sway" at the GDM login screen after the ansible run.
+  #
+  # Key split (see the xremap notes above): xremap eats Super+<letter|arrow> at
+  # the evdev layer for the macOS edit cluster, so Sway never sees those — every
+  # binding below deliberately avoids them. Window management is Ctrl+Alt+arrows
+  # (mirrors Rectangle on the Mac); those chords aren't in the keymap, so xremap
+  # passes them straight through to Sway.
+  wayland.windowManager.sway = {
+    enable = true;
+    package = null; # use the apt-installed Sway; HM just writes the config
+    # systemd.enable (default) injects the `systemctl --user import-environment`
+    # exec → WAYLAND_DISPLAY etc. reach the user bus, so the xremap service
+    # (wantedBy graphical-session.target) starts with a working environment.
+    systemd.enable = true;
+    checkConfig = false; # can't validate without a Sway package in the build
+    config = let
+      mod = "Mod4"; # Super
+      kitty = "${config.programs.kitty.package}/bin/kitty"; # nixGL-wrapped
+      ws = builtins.genList (i: toString (i + 1)) 9; # ["1".."9"]
+    in {
+      modifier = mod;
+      terminal = kitty;
+      menu = "wofi --show drun";
+
+      input."type:touchpad" = {
+        tap = "enabled";
+        natural_scroll = "enabled";
+      };
+
+      # Per-host wallpaper (path literal → copied into the nix store).
+      output."*".bg = "${../../wallpapers/pro-wallpaper.avif} fill";
+
+      # Minimal built-in bar (no waybar dep): clock via a shell status loop.
+      bars = [{
+        position = "top";
+        statusCommand = "while date +'%Y-%m-%d  %H:%M'; do sleep 20; done";
+      }];
+
+      # Full, explicit set (replaces HM's defaults, which bind Super+arrows /
+      # Super+hjkl — both pointless here since xremap grabs them first).
+      keybindings = {
+        "${mod}+Return" = "exec ${kitty}";
+        "${mod}+d" = "exec wofi --show drun";
+        "${mod}+Shift+q" = "kill";
+        "${mod}+Shift+c" = "reload";
+        "${mod}+Shift+e" =
+          "exec swaynag -t warning -m 'Exit Sway?' -B 'Yes' 'swaymsg exit'";
+
+        # Window management — Ctrl+Alt+arrows focus, +Shift moves the window.
+        "Ctrl+Mod1+Left" = "focus left";
+        "Ctrl+Mod1+Down" = "focus down";
+        "Ctrl+Mod1+Up" = "focus up";
+        "Ctrl+Mod1+Right" = "focus right";
+        "Ctrl+Mod1+Shift+Left" = "move left";
+        "Ctrl+Mod1+Shift+Down" = "move down";
+        "Ctrl+Mod1+Shift+Up" = "move up";
+        "Ctrl+Mod1+Shift+Right" = "move right";
+
+        # Layout / window state (Super+f is taken by xremap → use Shift).
+        "${mod}+Shift+f" = "fullscreen toggle";
+        "${mod}+Shift+space" = "floating toggle";
+        "${mod}+b" = "splith";
+        "${mod}+w" = "layout tabbed";
+        "${mod}+e" = "layout toggle split";
+
+        # Desktops — Super+N jumps, Super+Shift+N sends the window there,
+        # Ctrl+Alt+[ / ] cycle (Spaces-like).
+        "Ctrl+Mod1+bracketleft" = "workspace prev";
+        "Ctrl+Mod1+bracketright" = "workspace next";
+      } // builtins.listToAttrs (builtins.concatMap (n: [
+        { name = "${mod}+${n}"; value = "workspace number ${n}"; }
+        { name = "${mod}+Shift+${n}"; value = "move container to workspace number ${n}"; }
+      ]) ws);
+    };
+  };
 
   # GNOME / Ubuntu Dock — pro only (this file is imported solely by mkHome "pro")
+  # NB: left for a GNOME fallback session; under Sway none of this applies and
+  # xremap no longer uses the GNOME extension (window detection is wlroots-native).
   dconf.settings = {
     "org/gnome/shell" = {
       favorite-apps = [
@@ -143,9 +223,6 @@
         "bitwarden.desktop"
         "kitty.desktop"
       ];
-      # Ubuntu's stock extensions load via vendor defaults (this key is empty),
-      # so listing only xremap here adds it without disabling the dock etc.
-      enabled-extensions = [ "xremap@k0kubun.com" ];
     };
 
     # GNOME claims a few Super+<letter> chords that collide with the macOS edit
@@ -162,8 +239,8 @@
     # Per-host wallpaper (placeholder: wallpapers/pro-wallpaper.png). The path
     # literal copies the image into the nix store; swap the file to change it.
     "org/gnome/desktop/background" = {
-      picture-uri = "file://${../../wallpapers/pro-wallpaper.png}";
-      picture-uri-dark = "file://${../../wallpapers/pro-wallpaper.png}";
+      picture-uri = "file://${../../wallpapers/pro-wallpaper.avif}";
+      picture-uri-dark = "file://${../../wallpapers/pro-wallpaper.avif}";
       picture-options = "zoom";
     };
 
