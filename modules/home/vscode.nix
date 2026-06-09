@@ -26,6 +26,7 @@
         # diagram visualization
         bierner.markdown-mermaid # render Mermaid in the markdown preview
         jebbs.plantuml # PlantUML preview/export — renders locally via java + dot
+        hediet.vscode-drawio # edit .drawio/.dio diagrams inline (offline, no account)
       ]);
       # macOS-style Super (⌘) bindings. xremap leaves the Super key untouched in
       # VSCode (see modules/hosts/pro.nix) precisely so these focus-aware rules

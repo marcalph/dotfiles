@@ -7,6 +7,7 @@
     ignores = [
       "CLAUDE.md"
       "TODO.md"
+      "marcalph/"
     ];
     settings = {
       user.name = "marcalph";
