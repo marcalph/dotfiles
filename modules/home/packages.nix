@@ -2,6 +2,7 @@
 
 {
   home.packages = with pkgs; [
+    remmina
     bitwarden-cli
     magic-wormhole
     google-cloud-sql-proxy
