@@ -19,7 +19,7 @@
     dotenv-cli
     poetry
     pandoc
-    pre-commit
+    prek # fast Rust reimplementation of pre-commit (reads .pre-commit-config.yaml)
     commitizen # conventional-commit prompt / changelog / version bump (`git cz`)
     worktrunk # git worktree manager for parallel AI-agent workflows
     tldr
