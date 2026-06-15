@@ -8,6 +8,7 @@
     ./vscode.nix
     ./kitty.nix
     ./firefox.nix
+    ./worktrunk.nix
   ];
 
   home.stateVersion = "24.11";
