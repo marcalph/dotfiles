@@ -7,6 +7,7 @@
     magic-wormhole
     google-cloud-sql-proxy
     google-cloud-sdk
+    terraform
     ookla-speedtest
     # Python interpreters are managed by uv, not nix: `uv python install 3.12 …`
     # symlinks pythonX.Y into ~/.local/bin (on PATH), so uv and poetry projects
@@ -21,6 +22,8 @@
     poetry
     pandoc
     prek # fast Rust reimplementation of pre-commit (reads .pre-commit-config.yaml)
+    act # run GitHub Actions workflows locally (needs Docker)
+    ghostty # GPU-accelerated terminal emulator
     commitizen # conventional-commit prompt / changelog / version bump (`git cz`)
     worktrunk # git worktree manager for parallel AI-agent workflows
     tldr
