@@ -1,8 +1,12 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 
 {
   programs.firefox = {
     enable = true;
+    # Pin the legacy Linux profile path (~/.mozilla/firefox). home-manager flips
+    # this default to the XDG path ($XDG_CONFIG_HOME/mozilla/firefox) at
+    # stateVersion 26.05; setting it explicitly silences the default-change warning
+    configPath = lib.mkIf pkgs.stdenv.hostPlatform.isLinux ".mozilla/firefox";
     profiles.default = {
       isDefault = true;
       extensions.packages = with pkgs.nur.repos.rycee.firefox-addons; [

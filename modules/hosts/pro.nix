@@ -41,12 +41,13 @@
 
   # ── macOS-style keyboard (Super == ⌘) ──────────────────────────────────────
   # Two layers, deliberately split (same model as macOS):
-  #   • app-internal keys (copy/paste/cut, in-file nav) → xremap, below.
+  #   • app-internal keys (select-all/undo/save/find, in-file nav) → xremap,
+  #     below. Clipboard (copy/paste/cut) stays on native Linux defaults.
   #   • window/desktop management → Sway natively (Ctrl+Alt+arrows, mirroring
   #     Rectangle's defaults on the Mac so muscle memory is identical). Those
   #     chords aren't in the keymap, so xremap passes them through to Sway.
   #
-  # No compositor (Sway or GNOME) can remap copy/paste or in-file nav — those
+  # No compositor (Sway or GNOME) can remap in-file edit/nav keys — those
   # live inside each app's toolkit, not the WM — so we remap at the evdev layer
   # with xremap. It grabs the keyboard and re-emits via /dev/uinput; device
   # access is granted by ansible/pro.yml (input group + uinput udev rule + module).
@@ -57,28 +58,12 @@
     enable = true;
     withWlroots = true; # Sway window-class detection (upstream-recommended over withSway)
     config.keymap = [
-      # Terminals: ⌘C/V/X → Ctrl+Shift+C/V/X so they copy/paste instead of
-      # sending SIGINT/SIGQUIT. (Detecting the terminal needs the extension.)
+      # The ⌘ edit cluster (minus clipboard) → Ctrl equivalents. Copy/paste/cut
+      # are deliberately NOT remapped — they use native Linux defaults instead
+      # (Ctrl+C/V/X in apps, Ctrl+Shift+C/V/X in terminals), which is why no
+      # terminal-specific clipboard block is needed here anymore.
       {
-        name = "clipboard (terminals)";
-        application.only = [
-          "kitty"
-          "Alacritty"
-          "org.gnome.Terminal"
-          "org.gnome.Console"
-          "foot"
-          "WezTerm"
-          "wezterm"
-        ];
-        remap = {
-          "Super-c" = "C-Shift-c";
-          "Super-v" = "C-Shift-v";
-          "Super-x" = "C-Shift-x";
-        };
-      }
-      # Everywhere else: the ⌘ edit cluster → Ctrl equivalents.
-      {
-        name = "clipboard + edit (apps)";
+        name = "edit (apps)";
         application.not = [
           "kitty"
           "Alacritty"
@@ -89,7 +74,7 @@
           "wezterm"
           # VSCode is one window holding both an editor and a terminal, so a
           # WM_CLASS-level rule can't tell them apart — blindly sending Ctrl
-          # would make ⌘C SIGINT / ⌘Z suspend / ⌘S freeze in its terminal.
+          # would make ⌘Z suspend / ⌘S freeze in its terminal.
           # Let Super pass through; VSCode resolves it focus-aware via its own
           # keybindings (modules/home/vscode.nix). Ctrl is left untouched there,
           # so terminal SIGINT stays on Ctrl+C. (Nav below still applies to it.)
@@ -97,9 +82,6 @@
           "Code"
         ];
         remap = {
-          "Super-c" = "C-c"; # copy
-          "Super-v" = "C-v"; # paste
-          "Super-x" = "C-x"; # cut
           "Super-a" = "C-a"; # select all
           "Super-z" = "C-z"; # undo
           "Super-Shift-z" = "C-Shift-z"; # redo
@@ -228,10 +210,11 @@
     # GNOME claims a few Super+<letter> chords that collide with the macOS edit
     # cluster. In most apps xremap rewrites Super+key at the device level before
     # GNOME sees it, but in xremap-excluded windows (VSCode) the real Super
-    # reaches GNOME and its shortcut wins (e.g. Super+V opened the notification
-    # list instead of pasting). Drop the conflicting chords so they fall through.
+    # reaches GNOME and its shortcut wins. Drop the still-conflicting chords so
+    # they fall through. Super+V is back to its GNOME default: clipboard is no
+    # longer remapped (paste is native Ctrl+V), so it no longer needs freeing.
     "org/gnome/shell/keybindings" = {
-      toggle-message-tray = [ "<Super>m" ]; # was [<Super>v, <Super>m]; free Super+V
+      toggle-message-tray = [ "<Super>v" "<Super>m" ]; # GNOME default (Super+V freed of paste)
       toggle-application-view = [ ]; # was [<Super>a]; free Super+A (select all)
       toggle-quick-settings = [ ]; # was [<Super>s]; free Super+S (save)
     };
