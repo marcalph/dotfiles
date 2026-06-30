@@ -49,6 +49,7 @@
     tk
     # Audio/video processing
     ffmpeg-full
+    rerun # viewer for streams of multimodal data (robotics/ML), egui-based
   ];
 
   home.sessionVariables = {
