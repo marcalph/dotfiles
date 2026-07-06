@@ -13,6 +13,16 @@
   targets.genericLinux.nixGL.defaultWrapper = "mesa";
   programs.kitty.package = config.lib.nixGL.wrap pkgs.kitty;
 
+  # nixGL wraps kitty by exporting an LD_LIBRARY_PATH full of Nix's Mesa +
+  # libglvnd so the Nix-built kitty can reach Ubuntu's GPU. But kitty is a
+  # terminal, so that env is inherited by everything launched from it — and
+  # Nix's vendor-neutral libglvnd then shadows the *system* GL of non-Nix apps
+  # started from the shell, aborting their GLX init (e.g. the /opt/serval Qt6
+  # app: "Could not initialize GLX" → SIGABRT). Reset it for kitty's children so
+  # they load Ubuntu's GL like any normal terminal. Nix GUI apps launched from
+  # here re-establish their own GL via their own nixGL wrappers, so this is safe.
+  programs.kitty.extraConfig = "env LD_LIBRARY_PATH=";
+
   home.packages = [
     pkgs.bitwarden-desktop
     # Obsidian on pro needs two fixes layered together:
