@@ -9,6 +9,7 @@
     ./kitty.nix
     ./firefox.nix
     ./worktrunk.nix
+    ./obsidian.nix
   ];
 
   home.stateVersion = "24.11";

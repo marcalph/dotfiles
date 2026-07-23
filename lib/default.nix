@@ -14,6 +14,16 @@ let
           (old.patches or [ ]);
       });
     })
+    # nixpkgs 20535e4 builds commitizen against Python 3.14, whose argparse quotes
+    # invalid-choice values ('init' vs init). commitizen 4.13.9's test_invalid_command
+    # golden file still expects the unquoted form, so its test suite fails and the
+    # package won't build. Skip that one test. Remove once nixpkgs/commitizen updates
+    # the fixture for Python 3.14.
+    (final: prev: {
+      commitizen = prev.commitizen.overridePythonAttrs (old: {
+        disabledTests = (old.disabledTests or [ ]) ++ [ "test_invalid_command" ];
+      });
+    })
   ];
 in {
   mkDarwin = hostname:
