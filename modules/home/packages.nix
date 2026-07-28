@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 
 {
   home.packages = with pkgs; [
@@ -49,7 +49,16 @@
     tk
     # Audio/video processing
     ffmpeg-full
-    rerun # viewer for streams of multimodal data (robotics/ML), egui-based
+    # Viewer for streams of multimodal data (robotics/ML), egui-based. It
+    # renders through wgpu, so on pro (Ubuntu, non-NixOS) it needs nixGL like
+    # kitty/obsidian do — see modules/hosts/pro.nix. Unwrapped, its Nix
+    # vulkan-loader finds only Ubuntu's ICD manifests, whose library_path is a
+    # bare soname ("libvulkan_intel.so") that Nix's ld.so never resolves, and
+    # there is no libEGL in its closure either → wgpu gets *zero* backends and
+    # dies with "Failed to create surface for any enabled backend: {}". The
+    # wrapper puts Nix's own Mesa on LD_LIBRARY_PATH, which satisfies both the
+    # ICD soname and EGL. No-op on air/tower, where nixGL is unconfigured.
+    (config.lib.nixGL.wrap rerun)
   ];
 
   home.sessionVariables = {
