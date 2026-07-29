@@ -58,7 +58,12 @@
     # dies with "Failed to create surface for any enabled backend: {}". The
     # wrapper puts Nix's own Mesa on LD_LIBRARY_PATH, which satisfies both the
     # ICD soname and EGL. No-op on air/tower, where nixGL is unconfigured.
-    (config.lib.nixGL.wrap rerun)
+    #
+    # nixpkgs builds the native binary with --no-default-features 
+    (config.lib.nixGL.wrap (rerun.overrideAttrs (old: {
+      cargoBuildFeatures = old.cargoBuildFeatures ++ [ "map_view" ];
+      cargoCheckFeatures = old.cargoCheckFeatures ++ [ "map_view" ];
+    })))
   ];
 
   home.sessionVariables = {
