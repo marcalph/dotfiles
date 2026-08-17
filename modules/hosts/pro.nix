@@ -1,4 +1,10 @@
-{ config, pkgs, inputs, lib, ... }: {
+{ config, pkgs, inputs, lib, ... }:
+let
+  # Bound once so home.packages and the desktop entry further down resolve to the
+  # same wrapped derivation — the entry needs an absolute Exec into it.
+  foliate = config.lib.nixGL.wrap pkgs.foliate;
+in
+{
   imports = [ inputs.xremap-flake.homeManagerModules.default ];
 
   # pro is the work machine → override the shared personal git identity
@@ -42,12 +48,51 @@
       nativeBuildInputs = [ pkgs.makeWrapper ];
       postBuild = "wrapProgram $out/bin/obsidian --add-flags '--disable-features=Vulkan'";
     }))
+    # Foliate (epub reader) is GTK4/libadwaita and renders the book itself through
+    # WebKitGTK 6.0, so both GSK and WebKit's compositor go out via Nix's
+    # vendor-neutral libglvnd. Unwrapped that resolves libEGL against Ubuntu's
+    # /usr/share/glvnd/egl_vendor.d and fails to pair the two loaders — the same
+    # EGL-init death as obsidian above. nixGL puts Nix's own Mesa on
+    # LD_LIBRARY_PATH and it renders. No symlinkJoin needed: unlike the obsidian
+    # case (where wrapProgram in postBuild needs a writable tree) nixGL.wrap keeps
+    # the whole package — bin/ *and* share/ — so the .desktop and icons survive.
+    # It does not rewrite Exec= though; see xdg.desktopEntries below.
+    foliate
     # Ansible owns pro's system layer (daemons/OS config) — run against localhost.
     # See ansible/pro.yml. ansible itself is a client tool → nix; the daemons it
     # installs (docker, …) are apt/system-level.
     pkgs.ansible
     pkgs.ansible-lint
   ];
+
+  # Foliate ships Exec=foliate — a *bare* name that GNOME resolves through the
+  # session PATH. That happens to work (~/.nix-profile/bin is first, and the file
+  # there is the nixGL wrapper), but any apt/snap foliate landing earlier on PATH
+  # would launch unwrapped and die on EGL init. Re-declaring the entry here pins
+  # Exec to an absolute path into the wrapped derivation. home-manager installs it
+  # as a hiPrio package, so it *shadows* the copy the package itself ships rather
+  # than adding a second "Foliate" to the app grid.
+  xdg.desktopEntries."com.github.johnfactotum.Foliate" = {
+    name = "Foliate";
+    genericName = "E-Book Viewer";
+    comment = "Read e-books in style";
+    exec = "${foliate}/bin/foliate %U";
+    icon = "com.github.johnfactotum.Foliate";
+    terminal = false;
+    type = "Application";
+    categories = [ "Office" "Viewer" ];
+    startupNotify = true;
+    mimeType = [
+      "application/epub+zip"
+      "application/x-mobipocket-ebook"
+      "application/vnd.amazon.mobi8-ebook"
+      "application/x-fictionbook+xml"
+      "application/x-zip-compressed-fb2"
+      "application/vnd.comicbook+zip"
+      "x-scheme-handler/opds"
+    ];
+    settings.Keywords = "Ebook;Book;EPUB;Viewer;Reader;";
+  };
 
   # ── macOS-style keyboard (Super == ⌘) ──────────────────────────────────────
   # Two layers, deliberately split (same model as macOS):
