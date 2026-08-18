@@ -56,6 +56,25 @@
       "cmd+3" = "goto_tab 3";
       "cmd+4" = "goto_tab 4";
       "cmd+5" = "goto_tab 5";
+    } // lib.optionalAttrs (!pkgs.stdenv.isDarwin) {
+      # Linux: cmd → super (macOS uses cmd natively, Linux uses Super key)
+      "super+d" = "launch --location=vsplit --cwd=current";
+      "super+shift+d" = "launch --location=hsplit --cwd=current";
+      "super+w" = "close_window";
+      "super+left" = "neighboring_window left";
+      "super+right" = "neighboring_window right";
+      "super+up" = "neighboring_window up";
+      "super+down" = "neighboring_window down";
+      "super+shift+left" = "resize_window narrower";
+      "super+shift+right" = "resize_window wider";
+      "super+shift+up" = "resize_window taller";
+      "super+shift+down" = "resize_window shorter";
+      "super+t" = "new_tab_with_cwd";
+
+      # Clipboard
+      "super+c" = "copy_to_clipboard";
+      "super+v" = "paste_from_clipboard";
+      "super+x" = "copy_to_clipboard";
     };
     themeFile = "Solarized_Dark";
   };

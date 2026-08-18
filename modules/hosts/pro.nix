@@ -1,7 +1,6 @@
 { config, pkgs, inputs, lib, ... }:
 let
-  # Bound once so home.packages and the desktop entry further down resolve to the
-  # same wrapped derivation — the entry needs an absolute Exec into it.
+  # shared with the desktop entry below, which needs an absolute Exec into it
   foliate = config.lib.nixGL.wrap pkgs.foliate;
 in
 {
@@ -48,15 +47,8 @@ in
       nativeBuildInputs = [ pkgs.makeWrapper ];
       postBuild = "wrapProgram $out/bin/obsidian --add-flags '--disable-features=Vulkan'";
     }))
-    # Foliate (epub reader) is GTK4/libadwaita and renders the book itself through
-    # WebKitGTK 6.0, so both GSK and WebKit's compositor go out via Nix's
-    # vendor-neutral libglvnd. Unwrapped that resolves libEGL against Ubuntu's
-    # /usr/share/glvnd/egl_vendor.d and fails to pair the two loaders — the same
-    # EGL-init death as obsidian above. nixGL puts Nix's own Mesa on
-    # LD_LIBRARY_PATH and it renders. No symlinkJoin needed: unlike the obsidian
-    # case (where wrapProgram in postBuild needs a writable tree) nixGL.wrap keeps
-    # the whole package — bin/ *and* share/ — so the .desktop and icons survive.
-    # It does not rewrite Exec= though; see xdg.desktopEntries below.
+    # GTK4 + WebKitGTK: same EGL-init failure as obsidian unwrapped. No symlinkJoin
+    # needed — nixGL.wrap keeps share/, so the .desktop and icons survive.
     foliate
     # Ansible owns pro's system layer (daemons/OS config) — run against localhost.
     # See ansible/pro.yml. ansible itself is a client tool → nix; the daemons it
@@ -65,13 +57,9 @@ in
     pkgs.ansible-lint
   ];
 
-  # Foliate ships Exec=foliate — a *bare* name that GNOME resolves through the
-  # session PATH. That happens to work (~/.nix-profile/bin is first, and the file
-  # there is the nixGL wrapper), but any apt/snap foliate landing earlier on PATH
-  # would launch unwrapped and die on EGL init. Re-declaring the entry here pins
-  # Exec to an absolute path into the wrapped derivation. home-manager installs it
-  # as a hiPrio package, so it *shadows* the copy the package itself ships rather
-  # than adding a second "Foliate" to the app grid.
+  # Upstream ships a bare `Exec=foliate`, resolved via PATH — an apt/snap foliate
+  # ahead of ~/.nix-profile/bin would launch unwrapped and die on EGL init. Pin it
+  # to the wrapped store path. hiPrio, so it shadows rather than duplicates.
   xdg.desktopEntries."com.github.johnfactotum.Foliate" = {
     name = "Foliate";
     genericName = "E-Book Viewer";
@@ -98,17 +86,12 @@ in
   # Two layers, deliberately split (same model as macOS):
   #   • app-internal keys (select-all/undo/save/find, in-file nav) → xremap,
   #     below. Clipboard (copy/paste/cut) stays on native Linux defaults.
-  #   • window/desktop management → Sway natively (Ctrl+Alt+arrows, mirroring
-  #     Rectangle's defaults on the Mac so muscle memory is identical). Those
-  #     chords aren't in the keymap, so xremap passes them through to Sway.
+  #   • window management → the compositor, on Super+arrows (⌘+arrows on the Mac),
+  #     so xremap must leave those alone.
   #
-  # No compositor (Sway or GNOME) can remap in-file edit/nav keys — those
-  # live inside each app's toolkit, not the WM — so we remap at the evdev layer
-  # with xremap. It grabs the keyboard and re-emits via /dev/uinput; device
-  # access is granted by ansible/pro.yml (input group + uinput udev rule + module).
-  #
-  # Ctrl is never touched, so Ctrl+C stays SIGINT in the terminal. A lone Super
-  # tap still reaches the compositor (only Super+<key> chords are grabbed).
+  # A compositor can't reach in-app edit keys, hence the evdev layer; xremap grabs
+  # the keyboard and re-emits via /dev/uinput (access via ansible/pro.yml).
+  # Ctrl is never touched, so Ctrl+C stays SIGINT in the terminal.
   services.xremap = {
     enable = true;
     withWlroots = true; # Sway window-class detection (upstream-recommended over withSway)
@@ -144,21 +127,14 @@ in
           "Super-f" = "C-f"; # find
         };
       }
-      # Navigation + selection — applied everywhere (Home/End are sane in shells
-      # too). ⌘←/→ = line edges, ⌘↑/↓ = doc edges, +Shift selects; ⌥←/→ = word.
+      # Super+arrows are deliberately absent: the compositor owns them for window
+      # management (⌘+arrows on the Mac). Line/doc edges are plain Home/End.
+      # GNOME already binds them via Ubuntu's Tiling Assistant extension (apt).
       {
         name = "navigation + selection";
         remap = {
-          "Super-Left" = "Home";
-          "Super-Right" = "End";
-          "Super-Up" = "C-Home";
-          "Super-Down" = "C-End";
-          "Super-Shift-Left" = "Shift-Home";
-          "Super-Shift-Right" = "Shift-End";
-          "Super-Shift-Up" = "C-Shift-Home";
-          "Super-Shift-Down" = "C-Shift-End";
-          "Alt-Left" = "C-Left"; # word left  (note: replaces browser "Back")
-          "Alt-Right" = "C-Right"; # word right (replaces browser "Forward")
+          "Alt-Left" = "C-Left"; # word left (replaces browser "Back")
+          "Alt-Right" = "C-Right"; # word right (replaces "Forward")
           "Alt-Shift-Left" = "C-Shift-Left";
           "Alt-Shift-Right" = "C-Shift-Right";
         };
@@ -173,11 +149,9 @@ in
   # home-manager owns ~/.config/sway/config only and the system Sway runs it.
   # Pick "Sway" at the GDM login screen after the ansible run.
   #
-  # Key split (see the xremap notes above): xremap eats Super+<letter|arrow> at
-  # the evdev layer for the macOS edit cluster, so Sway never sees those — every
-  # binding below deliberately avoids them. Window management is Ctrl+Alt+arrows
-  # (mirrors Rectangle on the Mac); those chords aren't in the keymap, so xremap
-  # passes them straight through to Sway.
+  # xremap eats Super+<letter>, so the bindings below avoid those. Super+<arrow> is
+  # free now but still unbound here — window management is on Ctrl+Alt+arrows, so
+  # this session does not yet match GNOME or the Mac.
   wayland.windowManager.sway = {
     enable = true;
     package = null; # use the apt-installed Sway; HM just writes the config
@@ -269,9 +243,15 @@ in
     # they fall through. Super+V is back to its GNOME default: clipboard is no
     # longer remapped (paste is native Ctrl+V), so it no longer needs freeing.
     "org/gnome/shell/keybindings" = {
-      toggle-message-tray = [ "<Super>v" "<Super>m" ]; # GNOME default (Super+V freed of paste)
+      toggle-message-tray = [ "<Super>m" ]; # removed <Super>v for kitty paste
       toggle-application-view = [ ]; # was [<Super>a]; free Super+A (select all)
       toggle-quick-settings = [ ]; # was [<Super>s]; free Super+S (save)
+      toggle-overview = [ ]; # free Super key (use alone to open Activities)
+      show-screen-recording-ui = [ ]; # remove any Super keybindings
+    };
+
+    "org/gnome/desktop/wm/keybindings" = {
+      show-desktop = [ ]; # free Super+D for kitty
     };
 
     # Per-host wallpaper (placeholder: wallpapers/pro-wallpaper.png). The path
