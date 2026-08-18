@@ -2,6 +2,7 @@
 let
   # shared with the desktop entry below, which needs an absolute Exec into it
   foliate = config.lib.nixGL.wrap pkgs.foliate;
+  steam = config.lib.nixGL.wrap pkgs.steam;
 in
 {
   imports = [ inputs.xremap-flake.homeManagerModules.default ];
@@ -50,6 +51,9 @@ in
     # GTK4 + WebKitGTK: same EGL-init failure as obsidian unwrapped. No symlinkJoin
     # needed — nixGL.wrap keeps share/, so the .desktop and icons survive.
     foliate
+    # Steam needs nixGL for the same reason: GPU process fails EGL init without it.
+    # The Nix-built steam finds Ubuntu's GL/EGL drivers via LD_LIBRARY_PATH.
+    steam
     # Ansible owns pro's system layer (daemons/OS config) — run against localhost.
     # See ansible/pro.yml. ansible itself is a client tool → nix; the daemons it
     # installs (docker, …) are apt/system-level.
