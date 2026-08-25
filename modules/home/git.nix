@@ -8,6 +8,7 @@
       "CLAUDE.md"
       "TODO.md"
       "marcalph/"
+      ".vscode"
     ];
     settings = {
       user.name = "marcalph";
