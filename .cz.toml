@@ -1,7 +1,70 @@
 [tool.commitizen]
-name = "cz_conventional_commits"
+name = "cz_customize"
 tag_format = "$version"
 version_scheme = "semver"
 version_provider = "scm"
-update_changelog_on_bump = true 
+update_changelog_on_bump = true
 major_version_zero = true
+
+# cz_customize replaces cz_conventional_commits to add chore and revert to the
+# type picker. Everything below copies cz_conventional_commits, so the message
+# format, the check pattern and the changelog do not change.
+[tool.commitizen.customize]
+message_template = "{{prefix}}{% if scope %}({{scope}}){% endif %}: {{subject}}{% if body %}\n\n{{body}}{% endif %}{% if is_breaking_change %}\n\nBREAKING CHANGE: {{footer}}{% elif footer %}\n\n{{footer}}{% endif %}"
+schema = "<type>(<scope>): <subject>\n<BLANK LINE>\n<body>\n<BLANK LINE>\n(BREAKING CHANGE: )<footer>"
+example = "fix: correct minor typos in code\n\nsee the issue for details on the typos fixed\n\ncloses issue #12"
+schema_pattern = '(?s)(build|bump|chore|ci|docs|feat|fix|perf|refactor|revert|style|test)(\(\S+\))?!?: ([^\n\r]+)((\n\n.*)|(\s*))?$'
+commit_parser = '^((?P<change_type>feat|fix|refactor|perf|BREAKING CHANGE)(?:\((?P<scope>[^()\r\n]*)\)|\()?(?P<breaking>!)?|\w+!):\s(?P<message>.*)?'
+changelog_pattern = '^((BREAKING[\-\ ]CHANGE|\w+)(\(.+\))?!?):'
+change_type_map = { feat = "Feat", fix = "Fix", refactor = "Refactor", perf = "Perf" }
+
+[[tool.commitizen.customize.questions]]
+type = "list"
+name = "prefix"
+message = "Select the type of change you are committing"
+choices = [
+  { value = "fix", name = "fix: A bug fix. Correlates with PATCH in SemVer", key = "x" },
+  { value = "feat", name = "feat: A new feature. Correlates with MINOR in SemVer", key = "f" },
+  { value = "docs", name = "docs: Documentation only changes", key = "d" },
+  { value = "style", name = "style: Changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc)", key = "s" },
+  { value = "refactor", name = "refactor: A code change that neither fixes a bug nor adds a feature", key = "r" },
+  { value = "perf", name = "perf: A code change that improves performance", key = "p" },
+  { value = "test", name = "test: Adding missing or correcting existing tests", key = "t" },
+  { value = "build", name = "build: Changes that affect the build system or external dependencies (example scopes: pip, docker, npm)", key = "b" },
+  { value = "ci", name = "ci: Changes to CI configuration files and scripts (example scopes: GitLabCI)", key = "c" },
+  { value = "chore", name = "chore: A change that does not modify source or test files", key = "h" },
+  { value = "revert", name = "revert: A commit that undoes an earlier commit", key = "v" },
+  { value = "bump", name = "bump: A version change. cz bump normally writes this type itself", key = "u" },
+]
+
+# TOML holds no Python code, so these three filters of cz_conventional_commits
+# are gone:
+#   scope   joined the words with "-"
+#   subject removed a last "." and refused an empty answer
+#   body    changed each "|" into a new line
+# Type each answer in its final form. An empty subject now fails at pre-commit.
+[[tool.commitizen.customize.questions]]
+type = "input"
+name = "scope"
+message = "What is the scope of this change? (class or file name): (press [enter] to skip)\n"
+
+[[tool.commitizen.customize.questions]]
+type = "input"
+name = "subject"
+message = "Write a short and imperative summary of the code changes: (lower case and no period)\n"
+
+[[tool.commitizen.customize.questions]]
+type = "input"
+name = "body"
+message = "Provide additional contextual information about the code changes: (press [enter] to skip)\n"
+
+[[tool.commitizen.customize.questions]]
+type = "confirm"
+name = "is_breaking_change"
+message = "Is this a BREAKING CHANGE? Correlates with MAJOR in SemVer"
+default = false
+
+[[tool.commitizen.customize.questions]]
+type = "input"
+name = "footer"
+message = "Footer. Information about Breaking Changes and reference issues that this commit closes: (press [enter] to skip)\n"
