@@ -28,39 +28,10 @@
         jebbs.plantuml # PlantUML preview/export — renders locally via java + dot
         hediet.vscode-drawio # edit .drawio/.dio diagrams inline (offline, no account)
       ]);
-      # macOS-style Super (⌘) bindings. xremap leaves the Super key untouched in
-      # VSCode (see modules/hosts/pro.nix) precisely so these focus-aware rules
-      # can fire: ⌘C/V/etc. resolve to the editor, integrated terminal, or file
-      # explorer depending on what's focused. Ctrl is never rebound, so Ctrl+C in
-      # the terminal stays SIGINT. ("meta" is Super on Linux.)
-      keybindings = [
-        # ── copy ──
-        { key = "meta+c"; command = "editor.action.clipboardCopyAction"; when = "editorTextFocus"; }
-        { key = "meta+c"; command = "workbench.action.terminal.copySelection"; when = "terminalFocus && terminalTextSelected"; }
-        { key = "meta+c"; command = "filesExplorer.copy"; when = "filesExplorerFocus && !inputFocus"; }
-        # ── paste ──
-        { key = "meta+v"; command = "editor.action.clipboardPasteAction"; when = "editorTextFocus"; }
-        { key = "meta+v"; command = "workbench.action.terminal.paste"; when = "terminalFocus"; }
-        { key = "meta+v"; command = "filesExplorer.paste"; when = "filesExplorerFocus && !inputFocus"; }
-        # ── cut ──
-        { key = "meta+x"; command = "editor.action.clipboardCutAction"; when = "editorTextFocus && !editorReadonly"; }
-        { key = "meta+x"; command = "filesExplorer.cut"; when = "filesExplorerFocus && !inputFocus"; }
-        # ── select all ──
-        { key = "meta+a"; command = "editor.action.selectAll"; when = "editorTextFocus"; }
-        { key = "meta+a"; command = "workbench.action.terminal.selectAll"; when = "terminalFocus"; }
-        # ── undo / redo ──
-        { key = "meta+z"; command = "undo"; when = "editorTextFocus && !editorReadonly"; }
-        { key = "meta+shift+z"; command = "redo"; when = "editorTextFocus && !editorReadonly"; }
-        # ── save / find ──
-        { key = "meta+s"; command = "workbench.action.files.save"; }
-        { key = "meta+f"; command = "actions.find"; when = "editorFocus"; }
-        { key = "meta+f"; command = "workbench.action.terminal.focusFind"; when = "terminalFocus"; }
-        # Preserved from the previous hand-edited keybindings.json: Shift+Enter
-        # sends ESC+CR in the terminal (lets TUIs/REPLs insert a newline).
-        { key = "shift+enter"; command = "workbench.action.terminal.sendSequence";
-          args.text = builtins.fromJSON ''"\u001b\r"''; when = "terminalFocus"; }
-      ];
 
+      # No keybindings block, and no remap layer under it either (xremap is gone
+      # from modules/hosts/pro.nix). vscode uses its stock keys: Ctrl+C/V/X,
+      # Ctrl+A, Ctrl+Z, Ctrl+S, Ctrl+F.
       userSettings = {
         "update.mode" = "none";
         "terminal.integrated.fontFamily" = "Hack Nerd Font Mono";
@@ -74,4 +45,9 @@
       };
     };
   };
+
+  # Zed is a trial, kept in this file so one deletion removes it again. Its
+  # settings.json and keymap.json stay mutable (module defaults), so zed writes
+  # its own in-app changes. No keymap here either: zed uses its stock Ctrl keys.
+  programs.zed-editor.enable = true;
 }

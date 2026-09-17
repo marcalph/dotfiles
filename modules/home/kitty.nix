@@ -31,6 +31,29 @@
       macos_option_as_alt = true;
       macos_quit_when_last_window_closed = true;
     };
+    # kitty's own defaults stay active next to the set below; kitty_mod is
+    # ctrl+shift, and none of these chords collide with the super+* set here.
+    # Read from kitty 0.47.4 lib/kitty/kitty/options/definition.py.
+    #   clipboard  kitty_mod+c copy, +v paste, +s paste selection (or shift+insert),
+    #              +o pass selection to a program
+    #   scroll     kitty_mod+up/down or +k/+j line, +page_up/+page_down page,
+    #              +home/+end ends, +z/+x previous/next shell prompt,
+    #              +h scrollback in pager, +g last command output, +/ search
+    #   window     kitty_mod+enter new, +n new OS window, +w close, +]/+[ cycle,
+    #              +f/+b move forward/back, +` move to top, +r resize mode,
+    #              +1..+0 focus Nth, +f7 pick one, +f8 swap two
+    #   tab        kitty_mod+right/+left or ctrl+tab / ctrl+shift+tab cycle,
+    #              +t new, +q close, +. / +, move, +alt+t set title
+    #   layout     kitty_mod+l next layout
+    #   font       kitty_mod+equal or +plus bigger, +minus smaller,
+    #              +backspace reset
+    #   selection  kitty_mod+e open URL, then kitty_mod+p> prefixed: f/shift+f
+    #              selected path, c/d chosen file or directory, l line, w word,
+    #              h hash, n file at line, y hyperlink
+    #   misc       kitty_mod+f1 docs, +f2 edit config, +f3 command palette,
+    #              +f5 reload config, +f6 debug config, +f10 maximize,
+    #              +f11 fullscreen, +u unicode input, +escape kitty shell,
+    #              +delete reset terminal, +a> then m/l/1/d background opacity
     keybindings = {
       # Splits
       "cmd+d" = "launch --location=vsplit --cwd=current";
