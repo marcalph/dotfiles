@@ -144,6 +144,7 @@ in
         "obsidian.desktop"
         "bitwarden.desktop"
         "kitty.desktop"
+        "dev.zed.Zed.desktop"
       ];
     };
 

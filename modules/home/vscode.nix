@@ -49,5 +49,13 @@
   # Zed is a trial, kept in this file so one deletion removes it again. Its
   # settings.json and keymap.json stay mutable (module defaults), so zed writes
   # its own in-app changes. No keymap here either: zed uses its stock Ctrl keys.
-  programs.zed-editor.enable = true;
+  programs.zed-editor = {
+    enable = true;
+    # Only what zed does not already ship. Built in, so absent here: python
+    # (pyright/ruff), c/cpp (clangd), rust, git blame + git panel, and the
+    # claude-acp agent. "toml" is grammar only — add "tombi" for a TOML LSP.
+    # No zed equivalent exists for drawio, excalidraw, colab, mermaid preview
+    # or per-window colors, so those stay vscode-only.
+    extensions = [ "nix" "terraform" "dockerfile" "toml" ];
+  };
 }
