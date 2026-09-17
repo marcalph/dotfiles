@@ -139,6 +139,11 @@
           - wl-clipboard # wl-copy / wl-paste for CLI clipboard
           - grim         # screenshots
           - slurp        # region select for grim
+          # swaylock authenticates through PAM, and only the apt package ships
+          # /etc/pam.d/swaylock. A nix swaylock finds no PAM service here and
+          # rejects every password, which locks you out of a running session.
+          # swayidle (modules/hosts/pro.nix) calls this binary by absolute path.
+          - swaylock     # lock screen
         state: present
         update_cache: false
 

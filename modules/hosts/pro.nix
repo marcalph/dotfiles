@@ -3,6 +3,12 @@ let
   # shared with the desktop entry below, which needs an absolute Exec into it
   foliate = config.lib.nixGL.wrap pkgs.foliate;
   steam = config.lib.nixGL.wrap pkgs.steam;
+  # apt-provided, like sway itself: swaylock authenticates through PAM, and the
+  # Ubuntu package is what ships /etc/pam.d/swaylock. A nix swaylock has no PAM
+  # file here, so it would refuse every password and lock you out of the
+  # session. swaymsg must match the running apt sway 1.9.
+  swaylock = "/usr/bin/swaylock";
+  swaymsg = "/usr/bin/swaymsg";
 in
 {
   # pro is the work machine → override the shared personal git identity
@@ -12,6 +18,14 @@ in
 
   # make kitty etc. show up in the ubuntu app grid
   targets.genericLinux.enable = true;
+
+  # GDM runs sway straight from /usr/share/wayland-sessions, so no shell profile
+  # is read and the session PATH keeps only the system dirs. environment.d is
+  # the one env file that session does read — targets.genericLinux already puts
+  # XDG_DATA_DIRS there — so PATH goes there too. Without it wofi hides every
+  # nix app whose .desktop has a bare `TryExec` (zed) and fails to start the
+  # ones with a bare `Exec` (vscode), because neither name resolves.
+  systemd.user.sessionVariables.PATH = "${config.home.profileDirectory}/bin\${PATH:+:$PATH}";
 
   targets.genericLinux.nixGL.packages = inputs.nixgl.packages;
   targets.genericLinux.nixGL.defaultWrapper = "mesa";
@@ -118,19 +132,51 @@ in
         natural_scroll = "enabled";
       };
 
+      # Mice and the trackpoint run far too fast at libinput's default 0.
+      # Range is -1 (slowest) to 1; the touchpad above keeps its own default.
+      input."type:pointer".pointer_accel = "-0.4";
+
       # Per-host wallpaper (path literal → copied into the nix store).
       output."*".bg = "${../../wallpapers/pro-wallpaper.avif} fill";
 
-      # Minimal built-in bar (no waybar dep): clock via a shell status loop.
-      bars = [{
-        position = "top";
-        statusCommand = "while date +'%Y-%m-%d  %H:%M'; do sleep 20; done";
-      }];
+      # No swaybar. HM derives `swaybar_command` from its own sway package even
+      # when `package = null`, so the bar block pulled a whole nix sway 1.12
+      # into the closure and ran its bar against the apt sway 1.9. waybar
+      # replaces it, so the mismatch goes away with the block.
+      bars = [ ];
 
       # No keybindings attr: home-manager's sway defaults apply (Super+Return
       # terminal, Super+d menu, Super+arrows and Super+hjkl focus, Super+Shift+q
       # kill, Super+1..9 workspaces). Nothing grabs Super before sway now.
     };
+    # Appended, so it adds one key instead of replacing the defaults above.
+    extraConfig = "bindsym Mod4+Ctrl+l exec ${swaylock} -f";
+  };
+
+  # Bar, notifications and the idle watcher — the three things a GNOME session
+  # provided for free and sway does not. waybar ships its own default config
+  # (etc/xdg/waybar/config.jsonc: workspaces, clock, battery, network, tray),
+  # so none is written here.
+  programs.waybar = {
+    enable = true;
+    systemd.enable = true; # starts with graphical-session.target
+  };
+
+  services.mako.enable = true; # notification popups; sway has none built in
+
+  # swayidle decides when, swaylock is what it runs. Without the pair the
+  # screen never locks, not on idle and not on lid close.
+  services.swayidle = {
+    enable = true;
+    timeouts = [
+      { timeout = 300; command = "${swaylock} -f"; }
+      {
+        timeout = 600;
+        command = "${swaymsg} 'output * power off'";
+        resumeCommand = "${swaymsg} 'output * power on'";
+      }
+    ];
+    events = [ { event = "before-sleep"; command = "${swaylock} -f"; } ];
   };
 
   # GNOME / Ubuntu Dock — pro only (this file is imported solely by mkHome "pro")
