@@ -70,6 +70,8 @@ in
     # GTK4 + WebKitGTK: same EGL-init failure as obsidian unwrapped. No symlinkJoin
     # needed — nixGL.wrap keeps share/, so the .desktop and icons survive.
     foliate
+    # Drag-and-drop output layout, the GNOME "Displays" equivalent for wlroots.
+    (config.lib.nixGL.wrap pkgs.wdisplays)
     # Steam needs nixGL for the same reason: GPU process fails EGL init without it.
     # The Nix-built steam finds Ubuntu's GL/EGL drivers via LD_LIBRARY_PATH.
     steam
@@ -163,6 +165,20 @@ in
   };
 
   services.mako.enable = true; # notification popups; sway has none built in
+
+  # Output layout per set of connected screens
+  services.kanshi = {
+    enable = true;
+    profiles = {
+      undocked.outputs = [
+        { criteria = "eDP-1"; position = "0,0"; status = "enable"; }
+      ];
+      docked.outputs = [
+        { criteria = "Dell Inc. DELL S3425DW 9RLSR44"; position = "0,0"; }
+        { criteria = "eDP-1"; position = "760,1440"; status = "enable"; }
+      ];
+    };
+  };
 
   # swayidle decides when, swaylock is what it runs. Without the pair the
   # screen never locks, not on idle and not on lid close.
