@@ -139,6 +139,15 @@
           - wl-clipboard # wl-copy / wl-paste for CLI clipboard
           - grim         # screenshots
           - slurp        # region select for grim
+          - brightnessctl # backlight keys (writes through logind, no group)
+          # The mouse UI for wifi and bluetooth. modules/home/sway-shell.nix
+          # starts both as tray applets. Both stay on apt. nm-applet is the
+          # only GUI that scans for wifi networks. blueman registers a root
+          # D-Bus mechanism, because the bluetooth on/off switch writes rfkill.
+          # The system bus reads that file in /usr/share, not in the nix
+          # profile.
+          - network-manager-gnome # nm-applet + nm-connection-editor
+          - blueman      # blueman-applet + blueman-manager
           # swaylock authenticates through PAM, and only the apt package ships
           # /etc/pam.d/swaylock. A nix swaylock finds no PAM service here and
           # rejects every password, which locks you out of a running session.

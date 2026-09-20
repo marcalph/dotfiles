@@ -11,6 +11,9 @@ let
   swaymsg = "/usr/bin/swaymsg";
 in
 {
+  # Bar, tray applets, notifications and launcher skin for the sway session.
+  imports = [ ../home/sway-shell.nix ];
+
   # pro is the work machine → override the shared personal git identity
   # (modules/home/git.nix) with the harmattan one, for this host only.
   programs.git.settings.user.name = lib.mkForce "marc-alphonsus";
@@ -129,6 +132,19 @@ in
       terminal = kitty;
       menu = "wofi --show drun";
 
+      # Same font and palette as kitty and waybar (Solarized Dark). A border
+      # replaces the titlebar, because the bar shows the window name.
+      fonts = { names = [ "Hack Nerd Font" ]; size = 10.0; };
+      gaps = { inner = 8; outer = 2; smartBorders = "on"; };
+      window = { border = 2; titlebar = false; };
+      floating = { border = 2; titlebar = false; };
+      colors = {
+        focused = { border = "#268bd2"; background = "#268bd2"; text = "#002b36"; indicator = "#2aa198"; childBorder = "#268bd2"; };
+        focusedInactive = { border = "#073642"; background = "#073642"; text = "#93a1a1"; indicator = "#073642"; childBorder = "#073642"; };
+        unfocused = { border = "#002b36"; background = "#002b36"; text = "#586e75"; indicator = "#002b36"; childBorder = "#002b36"; };
+        urgent = { border = "#dc322f"; background = "#dc322f"; text = "#fdf6e3"; indicator = "#dc322f"; childBorder = "#dc322f"; };
+      };
+
       input."type:touchpad" = {
         tap = "enabled";
         natural_scroll = "enabled";
@@ -141,6 +157,14 @@ in
       # Per-host wallpaper (path literal → copied into the nix store).
       output."*".bg = "${../../wallpapers/pro-wallpaper.avif} fill";
 
+      # This file sets no output position, so a `swaymsg reload` makes sway
+      # arrange the outputs left to right again and undo kanshi. kanshi only
+      # reacts to a plug event, so it never sees the reload. always = true
+      # runs this on every reload, and kanshi puts the layout back.
+      startup = [
+        { command = "systemctl --user restart kanshi.service"; always = true; }
+      ];
+
       # No swaybar. HM derives `swaybar_command` from its own sway package even
       # when `package = null`, so the bar block pulled a whole nix sway 1.12
       # into the closure and ran its bar against the apt sway 1.9. waybar
@@ -151,20 +175,25 @@ in
       # terminal, Super+d menu, Super+arrows and Super+hjkl focus, Super+Shift+q
       # kill, Super+1..9 workspaces). Nothing grabs Super before sway now.
     };
-    # Appended, so it adds one key instead of replacing the defaults above.
-    extraConfig = "bindsym Mod4+Ctrl+l exec ${swaylock} -f";
+    # Appended, so it adds keys instead of replacing the defaults above.
+    # Sway binds no laptop hardware key. GNOME did that before. wpctl comes
+    # with pipewire. brightnessctl, grim and slurp come from apt
+    # (ansible/pro.yml). --locked keeps volume and brightness usable while the
+    # screen is locked.
+    extraConfig = ''
+      bindsym Mod4+Ctrl+l exec ${swaylock} -f
+      bindsym --locked XF86AudioRaiseVolume exec /usr/bin/wpctl set-volume -l 1.0 @DEFAULT_AUDIO_SINK@ 5%+
+      bindsym --locked XF86AudioLowerVolume exec /usr/bin/wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-
+      bindsym --locked XF86AudioMute exec /usr/bin/wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle
+      bindsym --locked XF86AudioMicMute exec /usr/bin/wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle
+      bindsym --locked XF86MonBrightnessUp exec /usr/bin/brightnessctl set 5%+
+      bindsym --locked XF86MonBrightnessDown exec /usr/bin/brightnessctl set 5%-
+      bindsym Print exec /usr/bin/grim -g "$(/usr/bin/slurp)" - | /usr/bin/wl-copy
+    '';
   };
 
-  # Bar, notifications and the idle watcher — the three things a GNOME session
-  # provided for free and sway does not. waybar ships its own default config
-  # (etc/xdg/waybar/config.jsonc: workspaces, clock, battery, network, tray),
-  # so none is written here.
-  programs.waybar = {
-    enable = true;
-    systemd.enable = true; # starts with graphical-session.target
-  };
-
-  services.mako.enable = true; # notification popups; sway has none built in
+  # Bar and notifications are in modules/home/sway-shell.nix. The idle watcher
+  # below is the third thing a GNOME session gave for free.
 
   # Output layout per set of connected screens
   services.kanshi = {
