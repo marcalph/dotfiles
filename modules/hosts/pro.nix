@@ -173,9 +173,14 @@ in
       undocked.outputs = [
         { criteria = "eDP-1"; position = "0,0"; status = "enable"; }
       ];
+      # External on top, laptop below it, centred: x = (ext width - 1920) / 2
       docked.outputs = [
         { criteria = "Dell Inc. DELL S3425DW 9RLSR44"; position = "0,0"; }
         { criteria = "eDP-1"; position = "760,1440"; status = "enable"; }
+      ];
+      home.outputs = [
+        { criteria = "ASUSTek COMPUTER INC VY279HGR T7LMTF133369"; position = "0,0"; }
+        { criteria = "eDP-1"; position = "0,1080"; status = "enable"; }
       ];
     };
   };
