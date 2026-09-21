@@ -19,6 +19,7 @@ let
   nmEditor = "/usr/bin/nm-connection-editor";
   swaylock = "/usr/bin/swaylock";
   wpctl = "/usr/bin/wpctl"; # pipewire is the audio server on pro
+  brightnessctl = "/usr/bin/brightnessctl";
   pavucontrol = "${pkgs.pavucontrol}/bin/pavucontrol";
 in
 {
@@ -70,6 +71,7 @@ in
         format-icons.default = [ "󰕿" "󰖀" "󰕾" ];
         on-click = "${wpctl} set-mute @DEFAULT_AUDIO_SINK@ toggle";
         on-click-right = pavucontrol;
+        scroll-step = 5; # waybar sets the volume itself, through pipewire
       };
 
       bluetooth = {
@@ -89,9 +91,15 @@ in
         on-click = nmEditor;
       };
 
+      # Scroll to set the backlight. waybar writes
+      # /sys/class/backlight/*/brightness itself, and that file belongs to
+      # group video (ansible/pro.yml). brightnessctl runs the same write, so
+      # both paths need the same group.
       backlight = {
         format = "{icon} {percent}%";
         format-icons = [ "󰃞" "󰃟" "󰃠" ];
+        on-scroll-up = "${brightnessctl} set 5%+";
+        on-scroll-down = "${brightnessctl} set 5%-";
       };
 
       battery = {

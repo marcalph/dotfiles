@@ -139,7 +139,7 @@
           - wl-clipboard # wl-copy / wl-paste for CLI clipboard
           - grim         # screenshots
           - slurp        # region select for grim
-          - brightnessctl # backlight keys (writes through logind, no group)
+          - brightnessctl # backlight keys (needs the video group, see below)
           # The mouse UI for wifi and bluetooth. modules/home/sway-shell.nix
           # starts both as tray applets. Both stay on apt. nm-applet is the
           # only GUI that scans for wifi networks. blueman registers a root
@@ -155,6 +155,19 @@
           - swaylock     # lock screen
         state: present
         update_cache: false
+
+    # Ubuntu builds brightnessctl with no logind support, so it writes
+    # /sys/class/backlight/*/brightness straight. The udev rule the package
+    # ships (90-brightnessctl.rules) gives that file to group video, mode
+    # g+w. Without the group every write says "Permission denied" and the
+    # XF86MonBrightness keys do nothing.
+    - name: Add the login user to the video group - {{ target_user }}
+      tags: [sway]
+      ansible.builtin.user:
+        name: "{{ target_user }}"
+        groups: video
+        append: true
+      # NB: re-login (or `newgrp video`) for the group to take effect.
 
     # --- Unprivileged user namespaces (nix Electron/Chromium sandbox) -------
     # Ubuntu's AppArmor blocks unprivileged userns → nix-built Chromium/Electron
