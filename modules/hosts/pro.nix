@@ -204,7 +204,7 @@ in
       ];
       # External on top, laptop below it, centred: x = (ext width - 1920) / 2
       docked.outputs = [
-        { criteria = "Dell Inc. DELL S3425DW 9RLSR44"; position = "0,0"; }
+        { criteria = "Dell Inc. DELL S3425DW 9RLSR44"; position = "0,0"; mode = "3440x1440@99.982Hz"; }
         { criteria = "eDP-1"; position = "760,1440"; status = "enable"; }
       ];
       home.outputs = [
