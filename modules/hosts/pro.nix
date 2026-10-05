@@ -130,7 +130,8 @@ in
     in {
       modifier = mod;
       terminal = kitty;
-      menu = "wofi --show drun";
+      # environment.d PATH never reaches sway (GDM imports its own PATH), so set it here
+      menu = "env PATH=${config.home.profileDirectory}/bin:$PATH wofi --show drun";
 
       # Same font and palette as kitty and waybar (Solarized Dark). A border
       # replaces the titlebar, because the bar shows the window name.
