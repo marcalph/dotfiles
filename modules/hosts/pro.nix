@@ -215,6 +215,15 @@ in
     ];
   };
 
+  # apt swaylock (PAM, see top); HM writes the config only. swaylock 1.7 cannot
+  # read avif, so the png is a copy of the wallpaper made with `magick`.
+  programs.swaylock = {
+    enable = true;
+    package = null;
+    settings.image = "${../../wallpapers/pro-wallpaper.png}";
+    settings.scaling = "fill";
+  };
+
   # swayidle decides when, swaylock is what it runs. Without the pair the
   # screen never locks, not on idle and not on lid close.
   services.swayidle = {
