@@ -19,4 +19,6 @@
   fonts.fontconfig.enable = true;
   programs.home-manager.enable = true;
   programs.neovim.enable = true;
+  programs.neovim.withRuby = true;
+  programs.neovim.withPython3 = true;
 }

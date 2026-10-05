@@ -199,20 +199,20 @@ in
   # Output layout per set of connected screens
   services.kanshi = {
     enable = true;
-    profiles = {
-      undocked.outputs = [
+    settings = [
+      { profile.name = "undocked"; profile.outputs = [
         { criteria = "eDP-1"; position = "0,0"; status = "enable"; }
-      ];
+      ]; }
       # External on top, laptop below it, centred: x = (ext width - 1920) / 2
-      docked.outputs = [
+      { profile.name = "docked"; profile.outputs = [
         { criteria = "Dell Inc. DELL S3425DW 9RLSR44"; position = "0,0"; mode = "3440x1440@99.982Hz"; }
         { criteria = "eDP-1"; position = "760,1440"; status = "enable"; }
-      ];
-      home.outputs = [
+      ]; }
+      { profile.name = "home"; profile.outputs = [
         { criteria = "ASUSTek COMPUTER INC VY279HGR T7LMTF133369"; position = "0,0"; }
         { criteria = "eDP-1"; position = "0,1080"; status = "enable"; }
-      ];
-    };
+      ]; }
+    ];
   };
 
   # swayidle decides when, swaylock is what it runs. Without the pair the
@@ -227,7 +227,7 @@ in
         resumeCommand = "${swaymsg} 'output * power on'";
       }
     ];
-    events = [ { event = "before-sleep"; command = "${swaylock} -f"; } ];
+    events.before-sleep = "${swaylock} -f";
   };
 
   # GNOME / Ubuntu Dock — pro only (this file is imported solely by mkHome "pro")
