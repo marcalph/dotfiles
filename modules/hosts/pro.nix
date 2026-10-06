@@ -30,6 +30,11 @@ in
   # ones with a bare `Exec` (vscode), because neither name resolves.
   systemd.user.sessionVariables.PATH = "${config.home.profileDirectory}/bin\${PATH:+:$PATH}";
 
+  # The cursor sits on its own hardware plane, and on this Intel GPU the plane
+  # sometimes falls behind resize bars and popups. 1 makes sway draw the cursor
+  # into the frame, so it always shows on top. Sway reads it at start: log in again.
+  systemd.user.sessionVariables.WLR_NO_HARDWARE_CURSORS = "1";
+
   targets.genericLinux.nixGL.packages = inputs.nixgl.packages;
   targets.genericLinux.nixGL.defaultWrapper = "mesa";
   programs.kitty.package = config.lib.nixGL.wrap pkgs.kitty;
