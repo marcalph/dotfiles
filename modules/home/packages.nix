@@ -8,6 +8,7 @@
     google-cloud-sql-proxy
     google-cloud-sdk
     terraform
+    oxker
     ookla-speedtest
     # Python interpreters are managed by uv, not nix: `uv python install 3.12 …`
     # symlinks pythonX.Y into ~/.local/bin (on PATH), so uv and poetry projects

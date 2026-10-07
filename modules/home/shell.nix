@@ -9,6 +9,7 @@
   programs.fzf.enable = true;
   programs.fzf.enableZshIntegration = false;
   programs.ripgrep.enable = true;
+  programs.fd.enable = true;
   programs.direnv.enable = true;
   programs.starship.enable = true;
   programs.starship.enableZshIntegration = true;
