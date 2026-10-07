@@ -56,6 +56,8 @@
     export PATH=/nix/var/nix/profiles/default/bin:~/.cargo/bin:~/.local/bin:/usr/local/bin:$PATH
     export XDG_CONFIG_HOME="$HOME/.config"
 
+    [[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
+
     autoload -Uz compinit
     compinit
 
